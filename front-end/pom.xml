@@ -51,6 +51,8 @@
                 </executions>
                 <configuration>
                     <nodeVersion>v18.17.0</nodeVersion>
+                    <npmVersion>9.8.0</npmVersion>
+                    <downloadRoot>http://myproxy.example.org/nodejs/</downloadRoot>
                 </configuration>
             </plugin>
         </plugins>
