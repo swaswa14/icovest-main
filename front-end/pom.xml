@@ -11,7 +11,13 @@
 
     <artifactId>front-end</artifactId>
     <version>1.0.0</version>
-
+        <dependencies>
+            <dependency>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>1.13.4</version>
+            </dependency>
+        </dependencies>
     <build>
         <plugins>
             <plugin>
