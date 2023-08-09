@@ -3,16 +3,16 @@ import { useEffect, useState } from 'react'
 
 export default function useToggleTheme() {
     const { mode, setMode } = useApplicationContext()
-    const [checked, setChecked] = useState(false)
+    const [checked, setChecked] = useState(mode === 'dark')
     const [label, setLabel] = useState('Light Mode')
 
     useEffect(() => {
         if (mode === 'dark') {
             setChecked(true)
-            setLabel('Light Mode')
+            setLabel('Toggle Light Mode')
         } else {
             setChecked(false)
-            setLabel('Dark Mode')
+            setLabel('Toggle Dark Mode')
         }
     }, [])
 

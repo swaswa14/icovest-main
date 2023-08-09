@@ -10,11 +10,10 @@ export default function ToggleTheme() {
     return (
         <Tooltip
             content={label}
-            className={'scale-50'}
             placement={'top'}
             style={checked ? 'dark' : 'light'}
         >
-            <div className={'scale-75'}>
+            <div>
                 <ToggleSwitch
                     onToggle={toggleTheme}
                     label={checked ? <MdDarkMode /> : <BsBrightnessHigh />}
