@@ -1,5 +1,5 @@
-import useToggleTheme from '@/pages/components/features/toggle-theme-feature/useToggleTheme'
-import ToggleSwitch from '@/pages/components/ToggleSwitch'
+import useToggleTheme from '@/components/features/toggle-theme-feature/useToggleTheme'
+import ToggleSwitch from '@/components/ToggleSwitch'
 import { BsBrightnessHigh } from 'react-icons/bs'
 import { MdDarkMode } from 'react-icons/md'
 import { Tooltip } from 'flowbite-react'

@@ -1,4 +1,4 @@
-import ToggleTheme from '@/pages/components/features/toggle-theme-feature/ToggleTheme'
+import ToggleTheme from '@/components/features/toggle-theme-feature/ToggleTheme'
 
 export default function Home() {
     return (
