@@ -7,6 +7,10 @@ import { RiLockPasswordLine } from 'react-icons/ri'
 import Link from 'next/link'
 import { AiOutlineNumber } from 'react-icons/ai'
 
+const NumberIcon = () => (
+    <AiOutlineNumber className={'fill-slate-700 dark:fill-gray-300'} />
+)
+
 export default function RegisterWrapper() {
     return (
         <AuthenticationContainer
@@ -17,7 +21,7 @@ export default function RegisterWrapper() {
             <form className="space-y-2 md:space-y-2" action="#">
                 <div>
                     <label
-                        htmlFor="email"
+                        htmlFor="icovest-email"
                         className="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
                     >
                         Your email
@@ -26,7 +30,7 @@ export default function RegisterWrapper() {
                         icon={MdEmail}
                         type="email"
                         name="email"
-                        id="email"
+                        id="icovest-email"
                         placeholder="name@company.com"
                         required
                         className={
@@ -45,7 +49,7 @@ export default function RegisterWrapper() {
                         icon={BsFillFilePersonFill}
                         type="text"
                         name="name"
-                        id="name"
+                        id="icovest-name"
                         placeholder="John Doe"
                         required
                         className={
@@ -55,7 +59,7 @@ export default function RegisterWrapper() {
                 </div>
                 <div>
                     <label
-                        htmlFor="password"
+                        htmlFor="icovest-password"
                         className="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
                     >
                         Password
@@ -64,7 +68,7 @@ export default function RegisterWrapper() {
                         icon={RiLockPasswordLine}
                         type="password"
                         name="password"
-                        id="password"
+                        id="icovest-password"
                         placeholder="••••••••"
                         className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg"
                         required
@@ -95,7 +99,7 @@ export default function RegisterWrapper() {
                         Invitation code
                     </label>
                     <TextInput
-                        icon={AiOutlineNumber}
+                        icon={NumberIcon}
                         type="number"
                         name="invite-code"
                         id="invite-code"

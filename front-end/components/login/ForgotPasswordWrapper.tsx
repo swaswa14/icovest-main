@@ -3,35 +3,22 @@ import { Button, TextInput } from 'flowbite-react'
 
 import { MdEmail } from 'react-icons/md'
 import React from 'react'
-import { z } from 'zod'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
+
 import LoadingIcons from 'react-loading-icons'
+import useForgotPassword from '@/components/login/useForgotPassword'
+import FormButton from '../FormButton'
+import FormField from '../FormField'
+import FormContainer from '@/components/FormContainer'
 
 export default function ForgotPasswordWrapper() {
-    const schema = z.object({
-        email: z
-            .string()
-            .email({ message: 'Invalid Email' })
-            .min(1, { message: 'Email is required' }),
-    })
-
-    type ResetPasswordSchema = z.infer<typeof schema>
     const {
         register,
         handleSubmit,
-        formState: { errors, isSubmitting, isSubmitSuccessful },
-    } = useForm<ResetPasswordSchema>({
-        resolver: zodResolver(schema),
-    })
-
-    const onSubmit: SubmitHandler<ResetPasswordSchema> = async (schema) => {
-        await new Promise(async (resolve) => {
-            await setTimeout(() => {
-                resolve(schema)
-            }, 3000)
-        })
-    }
+        errors,
+        isSubmitting,
+        isSubmitSuccessful,
+        onSubmit,
+    } = useForgotPassword()
 
     return (
         <AuthenticationContainer
@@ -39,10 +26,7 @@ export default function ForgotPasswordWrapper() {
             backText={'Log in'}
             backLink={'/login'}
         >
-            <form
-                className="space-y-4 md:space-y-6"
-                onSubmit={handleSubmit(onSubmit)}
-            >
+            <FormContainer onSubmit={handleSubmit(onSubmit)}>
                 {isSubmitSuccessful ? (
                     <>
                         <h5 className={'text-gray-700'}>
@@ -57,49 +41,63 @@ export default function ForgotPasswordWrapper() {
                         </p>
                     </>
                 ) : (
-                    <div>
-                        <label
-                            htmlFor="email"
-                            className="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
-                        >
-                            Your email
-                        </label>
-                        <TextInput
-                            icon={MdEmail}
-                            type="email"
-                            id="email"
-                            placeholder="name@company.com"
-                            required
-                            className={
-                                'bg-gray-50 border border-gray-300 text-gray-900 rounded-lg'
-                            }
-                            color={errors.email?.message ? 'failure' : ''}
-                            {...register('email')}
-                            disabled={isSubmitting}
-                        />
-                        {errors.email?.message && (
-                            <p className={'text-red-600'}>
-                                {errors.email?.message}
-                            </p>
-                        )}
-                    </div>
+                    // <div>
+                    //     <label
+                    //         htmlFor="email"
+                    //         className="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
+                    //     >
+                    //         Your email
+                    //     </label>
+                    //     <TextInput
+                    //         icon={MdEmail}
+                    //         type="email"
+                    //         id="email"
+                    //         placeholder="name@company.com"
+                    //         required
+                    //         className={
+                    //             'bg-gray-50 border border-gray-300 text-gray-900 rounded-lg'
+                    //         }
+                    //         color={errors.email?.message ? 'failure' : ''}
+                    //         {...register('email')}
+                    //         disabled={isSubmitting}
+                    //     />
+                    //     {errors.email?.message && (
+                    //         <p className={'text-red-600'}>
+                    //             {errors.email?.message}
+                    //         </p>
+                    //     )}
+                    // </div>
+
+                    <FormField
+                        id="email"
+                        {...register('email')}
+                        type="email"
+                        placeholder="email@email.com"
+                        errorMessage={errors.email?.message}
+                        isDisabled={isSubmitting}
+                        label={'Your Email'}
+                        icon={MdEmail}
+                    />
                 )}
                 {!isSubmitSuccessful && (
-                    <Button
-                        className="w-full"
-                        type={'submit'}
-                        disabled={isSubmitting}
-                    >
-                        {isSubmitting ? (
-                            <LoadingIcons.SpinningCircles
-                                style={{ width: '1.5rem', height: '1.5rem' }}
-                            />
-                        ) : (
-                            'Reset password'
-                        )}
-                    </Button>
+                    <FormButton
+                        label={'Reset Password'}
+                        isSubmitting={isSubmitting}
+                    />
+                    //     className="w-full"
+                    //     type={'submit'}
+                    //     disabled={isSubmitting}
+                    // >
+                    //     {isSubmitting ? (
+                    //         <LoadingIcons.SpinningCircles
+                    //             style={{ width: '1.5rem', height: '1.5rem' }}
+                    //         />
+                    //     ) : (
+                    //         'Reset password'
+                    //     )}
+                    // </FormButton>
                 )}
-            </form>
+            </FormContainer>
         </AuthenticationContainer>
     )
 }

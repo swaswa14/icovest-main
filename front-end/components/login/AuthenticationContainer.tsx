@@ -41,7 +41,7 @@ export default function AuthenticationContainer({
                                     type={'link'}
                                     cursor={'pointer'}
                                     onHover={'primary'}
-                                    onClick={() => router.back()}
+                                    onClick={() => router.push('/login')}
                                 />
                             )}
                         </div>

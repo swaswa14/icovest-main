@@ -1,5 +1,5 @@
 import { useApplicationContext } from '@/context/ApplicationProvider'
-import { useEffect, useState } from 'react'
+import React, { ReactNode, useEffect, useState } from 'react'
 
 export default function useToggleTheme() {
     const { mode, setMode } = useApplicationContext()
