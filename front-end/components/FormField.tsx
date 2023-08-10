@@ -5,7 +5,6 @@ import React, {
     HTMLInputTypeAttribute,
     useRef,
 } from 'react'
-import { useForm } from '@/components/FormContainer'
 
 export interface FormFieldProps extends TextInputProps {
     id: string
@@ -32,14 +31,14 @@ export default function FormField({
     errorMessage,
     ...props
 }: FormFieldProps) {
-    const inputRef = useRef<HTMLInputElement>(null)
-    const registerField = useForm()
-
-    React.useEffect(() => {
-        if (inputRef.current) {
-            registerField(inputRef)
-        }
-    }, [registerField])
+    // const inputRef = useRef<HTMLInputElement>(null)
+    // const registerField = useForm()
+    //
+    // React.useEffect(() => {
+    //     if (inputRef.current) {
+    //         registerField(inputRef)
+    //     }
+    // }, [registerField])
 
     return (
         <div>
@@ -50,7 +49,6 @@ export default function FormField({
                 {label}
             </label>
             <TextInput
-                ref={inputRef}
                 color={errorMessage ? 'failure' : 'gray'}
                 icon={icon}
                 type={type}

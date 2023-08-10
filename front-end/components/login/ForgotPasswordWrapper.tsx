@@ -8,7 +8,6 @@ import LoadingIcons from 'react-loading-icons'
 import useForgotPassword from '@/components/login/useForgotPassword'
 import FormButton from '../FormButton'
 import FormField from '../FormField'
-import FormContainer from '@/components/FormContainer'
 
 export default function ForgotPasswordWrapper() {
     const {
@@ -26,7 +25,10 @@ export default function ForgotPasswordWrapper() {
             backText={'Log in'}
             backLink={'/login'}
         >
-            <FormContainer onSubmit={handleSubmit(onSubmit)}>
+            <form
+                onSubmit={handleSubmit(onSubmit)}
+                className={'space-y-4 md:space-y-6'}
+            >
                 {isSubmitSuccessful ? (
                     <>
                         <h5 className={'text-gray-700'}>
@@ -41,43 +43,32 @@ export default function ForgotPasswordWrapper() {
                         </p>
                     </>
                 ) : (
-                    // <div>
-                    //     <label
-                    //         htmlFor="email"
-                    //         className="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
-                    //     >
-                    //         Your email
-                    //     </label>
-                    //     <TextInput
-                    //         icon={MdEmail}
-                    //         type="email"
-                    //         id="email"
-                    //         placeholder="name@company.com"
-                    //         required
-                    //         className={
-                    //             'bg-gray-50 border border-gray-300 text-gray-900 rounded-lg'
-                    //         }
-                    //         color={errors.email?.message ? 'failure' : ''}
-                    //         {...register('email')}
-                    //         disabled={isSubmitting}
-                    //     />
-                    //     {errors.email?.message && (
-                    //         <p className={'text-red-600'}>
-                    //             {errors.email?.message}
-                    //         </p>
-                    //     )}
-                    // </div>
-
-                    <FormField
-                        id="email"
-                        {...register('email')}
-                        type="email"
-                        placeholder="email@email.com"
-                        errorMessage={errors.email?.message}
-                        isDisabled={isSubmitting}
-                        label={'Your Email'}
-                        icon={MdEmail}
-                    />
+                    <div>
+                        <label
+                            htmlFor="email"
+                            className="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
+                        >
+                            Your email
+                        </label>
+                        <TextInput
+                            icon={MdEmail}
+                            type="email"
+                            id="email"
+                            placeholder="name@company.com"
+                            required
+                            className={
+                                'bg-gray-50 border border-gray-300 text-gray-900 rounded-lg'
+                            }
+                            color={errors.email?.message ? 'failure' : 'gray'}
+                            {...register('email')}
+                            disabled={isSubmitting}
+                        />
+                        {errors.email?.message && (
+                            <p className={'text-red-600'}>
+                                {errors.email?.message}
+                            </p>
+                        )}
+                    </div>
                 )}
                 {!isSubmitSuccessful && (
                     <FormButton
@@ -97,7 +88,7 @@ export default function ForgotPasswordWrapper() {
                     //     )}
                     // </FormButton>
                 )}
-            </FormContainer>
+            </form>
         </AuthenticationContainer>
     )
 }
