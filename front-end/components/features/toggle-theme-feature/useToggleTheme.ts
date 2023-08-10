@@ -1,5 +1,5 @@
 import { useApplicationContext } from '@/context/ApplicationProvider'
-import React, { ReactNode, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 
 export default function useToggleTheme() {
     const { mode, setMode } = useApplicationContext()
@@ -14,7 +14,7 @@ export default function useToggleTheme() {
             setChecked(false)
             setLabel('Toggle Dark Mode')
         }
-    }, [])
+    }, [mode])
 
     const toggleTheme = () => {
         if (mode === 'dark') {

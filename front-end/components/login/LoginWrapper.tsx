@@ -5,24 +5,9 @@ import { MdEmail } from 'react-icons/md'
 import { RiLockPasswordFill } from 'react-icons/ri'
 import Link from 'next/link'
 import AuthenticationContainer from '@/components/login/AuthenticationContainer'
-
 import useLogin from '@/components/login/useLogin'
-
 import FormButton from '@/components/FormButton'
 import { TextInput } from 'flowbite-react'
-import LoadingIcons, {
-    BallTriangle,
-    Bars,
-    Circles,
-    Grid,
-    Hearts,
-    Oval,
-    Puff,
-    Rings,
-    SpinningCircles,
-    TailSpin,
-    ThreeDots,
-} from 'react-loading-icons'
 import PageLoad from '@/components/PageRedirect'
 
 export default function LoginWrapper() {

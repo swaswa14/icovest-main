@@ -15,6 +15,7 @@ export default function useRegister() {
     })
 
     const onSubmit: SubmitHandler<RegisterSchema> = async (schema) => {
+        // eslint-disable-next-line no-async-promise-executor
         await new Promise(async (resolve) => {
             await setTimeout(() => {
                 resolve(schema)

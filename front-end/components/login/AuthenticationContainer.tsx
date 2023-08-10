@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 
 import { MdOutlineKeyboardBackspace } from 'react-icons/md'
 import ToggleTheme from '@/components/features/toggle-theme-feature/ToggleTheme'
+import Image from 'next/image'
 
 export interface AuthenticationContainerProps {
     title: string
@@ -15,7 +16,6 @@ export default function AuthenticationContainer({
     title,
     children,
     backLink,
-    backText,
 }: AuthenticationContainerProps) {
     const router = useRouter()
     return (
@@ -25,7 +25,7 @@ export default function AuthenticationContainer({
                     href="#"
                     className="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white"
                 >
-                    <img
+                    <Image
                         className="w-8 h-8 mr-2"
                         src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
                         alt="logo"
@@ -40,7 +40,6 @@ export default function AuthenticationContainer({
                                     className={'h-8 w-8'}
                                     type={'link'}
                                     cursor={'pointer'}
-                                    onHover={'primary'}
                                     onClick={() => router.push('/login')}
                                 />
                             )}

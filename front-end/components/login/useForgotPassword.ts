@@ -16,6 +16,7 @@ export default function useForgotPassword() {
     })
 
     const onSubmit: SubmitHandler<ResetPasswordSchema> = async (schema) => {
+        // eslint-disable-next-line no-async-promise-executor
         await new Promise(async (resolve) => {
             await setTimeout(() => {
                 resolve(schema)
