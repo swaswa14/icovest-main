@@ -3,6 +3,7 @@ import React, {
     Dispatch,
     SetStateAction,
     useContext,
+    useEffect,
     useState,
 } from 'react'
 
@@ -37,6 +38,19 @@ export const ApplicationContextProvider = ({
         mode,
         setMode,
     }
+
+    useEffect(() => {
+        // Check if running in a browser environment
+        if (typeof window !== 'undefined') {
+            const storedMode = window.localStorage.getItem('icovest-theme') as
+                | 'dark'
+                | 'light'
+            if (storedMode) {
+                setMode(storedMode)
+            }
+        }
+    }, [])
+
     return (
         <ApplicationContext.Provider value={value}>
             {children}

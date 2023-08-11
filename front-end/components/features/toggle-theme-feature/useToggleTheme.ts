@@ -21,10 +21,16 @@ export default function useToggleTheme() {
             setMode('light')
             setChecked(false)
             setLabel('Toggle Dark Mode')
+            if (typeof window !== 'undefined') {
+                window.localStorage.setItem('icovest-theme', 'light')
+            }
         } else {
             setMode('dark')
             setChecked(true)
             setLabel('Toggle Light Mode')
+            if (typeof window !== 'undefined') {
+                window.localStorage.setItem('icovest-theme', 'dark')
+            }
         }
     }
 

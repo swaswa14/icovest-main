@@ -1,10 +1,6 @@
-import ToggleTheme from '@/components/features/toggle-theme-feature/ToggleTheme'
+import PageLoad from '@/components/PageRedirect'
+import React from 'react'
 
 export default function Home() {
-    return (
-        <div className={'flex flex-col justify-center text-center m-3'}>
-            <div>Hello world!</div>
-            <ToggleTheme />
-        </div>
-    )
+    return <PageLoad link={'/login'} delay={500} />
 }

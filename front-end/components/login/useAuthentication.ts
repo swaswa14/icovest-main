@@ -40,6 +40,8 @@ export default function useAuthentication() {
             }
         )
 
+    const inviteCode = z.number().min(1, { message: 'Invite code is required' })
+
     const name = z.string().min(1, { message: 'Name is required' })
 
     const user = z.string().min(1, { message: 'Email is required' })
@@ -56,6 +58,7 @@ export default function useAuthentication() {
             password,
             verifyPassword,
             name,
+            inviteCode,
         })
         .refine(
             (data) => {
