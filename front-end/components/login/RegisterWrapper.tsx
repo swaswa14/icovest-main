@@ -9,10 +9,6 @@ import { AiOutlineNumber } from 'react-icons/ai'
 import useRegister from '@/components/login/useRegister'
 import FormButton from '@/components/FormButton'
 
-const NumberIcon = () => (
-    <AiOutlineNumber className={'fill-slate-700 dark:fill-gray-300'} />
-)
-
 export default function RegisterWrapper() {
     const {
         register,
