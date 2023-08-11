@@ -16,6 +16,14 @@
     <version>1.0.0</version>
     <name>application-module</name>
     <description>This module will be used to run the jar application here we will compile all</description>
+    <dependencies>
+        <dependency>
+            <groupId>com.icovest</groupId>
+            <artifactId>user-feature</artifactId>
+            <version>1.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
     <packaging>jar</packaging>
     <build>
         <resources>

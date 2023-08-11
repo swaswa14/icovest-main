@@ -1,4 +1,4 @@
-package com.icovest.backend.controller;
+package com.icovest.backend.application.controller;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
