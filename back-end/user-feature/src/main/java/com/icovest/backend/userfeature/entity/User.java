@@ -47,6 +47,9 @@ public class User implements UserDetails {
     private List <Roles> roles;
     @Column(unique = true)
     private String inviteCode;
+
+    @Embedded
+    private Usdt usdt;
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()
