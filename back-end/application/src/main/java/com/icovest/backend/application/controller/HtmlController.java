@@ -1,4 +1,4 @@
-package com.icovest.backend.controller;
+package com.icovest.backend.application.controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
