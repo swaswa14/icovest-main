@@ -7,10 +7,9 @@ import org.springframework.context.annotation.Import;
 
 @SpringBootApplication
 @Import({UserFeatureConfig.class})
-public class BackEndApplication {
+public class  BackEndApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(BackEndApplication.class, args);
     }
-
 }
