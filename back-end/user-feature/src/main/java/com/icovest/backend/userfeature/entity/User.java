@@ -1,6 +1,7 @@
 package com.icovest.backend.userfeature.entity;
 
 import com.icovest.backend.enums.Roles;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
@@ -10,6 +11,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,7 +46,8 @@ public class User implements UserDetails {
     @Builder.Default
     private boolean isEnabled = false;
     @Transient
-    private List <Roles> roles;
+    private List <Roles> roles = new ArrayList<>();
+
     @Column(unique = true)
     private String inviteCode;
 
@@ -56,6 +59,12 @@ public class User implements UserDetails {
                 .map(r -> new SimpleGrantedAuthority("ROLE_" + r.name().toUpperCase()))
                 .collect(Collectors.toList());
     }
+
+
+    private String invitedBy;
+
+    @ManyToMany
+    private List<User> invitedUsers;
 
     @Override
     public String getPassword() {

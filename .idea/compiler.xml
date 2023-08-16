@@ -7,16 +7,20 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="authentication-feature" />
+        <module name="user-feature" />
         <module name="front-end" />
         <module name="application" />
-        <module name="user-feature" />
+        <module name="email-feature" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="application" options="-parameters" />
+      <module name="authentication-feature" options="-parameters" />
       <module name="back-end" options="" />
+      <module name="email-feature" options="-parameters" />
       <module name="front-end" options="-parameters" />
       <module name="user-feature" options="-parameters" />
     </option>

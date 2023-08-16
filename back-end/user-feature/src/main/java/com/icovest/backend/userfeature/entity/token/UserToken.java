@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.Instant;
 import java.util.Date;
 import java.util.UUID;
 
@@ -30,18 +31,23 @@ public class UserToken {
     private Long id;
 
     @CreationTimestamp
-    private Date createdDate;
+    @Column(nullable = false, updatable = false)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Instant createdDate;
     @ManyToOne
     private User user;
 
-    @CreationTimestamp
-    private int activeHours = 24;
+
     @Builder.Default
-    private String token = UUID.randomUUID().toString();
+    private String token = UUID.randomUUID().toString() + UUID.randomUUID().toString();
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date expiryDate;
 
+    @Enumerated(EnumType.STRING)
+    private TokenType tokenType;
 
-    public boolean isExpired() {
-        return createdDate.getTime() + (long) activeHours * 60 * 60 * 1000 < System.currentTimeMillis();
-    }
+//    public boolean isExpired() {
+//        return createdDate.getTime() + (long) activeHours * 60 * 60 * 1000 < System.currentTimeMillis();
+//    }
 }

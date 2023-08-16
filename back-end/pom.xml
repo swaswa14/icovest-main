@@ -18,6 +18,8 @@
     <modules>
         <module>application</module>
         <module>user-feature</module>
+        <module>email-feature</module>
+        <module>authentication-feature</module>
     </modules>
 
     <properties>

@@ -7,4 +7,5 @@ import lombok.Data;
 @Builder
 public class ForgotPasswordRequest {
     private String email;
+    private String code;
 }
