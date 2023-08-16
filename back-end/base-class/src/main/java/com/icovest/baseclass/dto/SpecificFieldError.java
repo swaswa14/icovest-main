@@ -1,4 +1,4 @@
-package com.icovest.backend.dto;
+package com.icovest.baseclass.dto;
 
 import lombok.Builder;
 import lombok.Getter;

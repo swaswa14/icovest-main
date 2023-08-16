@@ -1,8 +1,8 @@
 package com.icovest.backend.application.apierror;
 
-import com.icovest.backend.dto.CustomFieldErrors;
-import com.icovest.backend.dto.FieldErrorDto;
-import com.icovest.backend.dto.SpecificFieldError;
+import com.icovest.baseclass.dto.CustomFieldErrors;
+import com.icovest.baseclass.dto.FieldErrorDto;
+import com.icovest.baseclass.dto.SpecificFieldError;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;

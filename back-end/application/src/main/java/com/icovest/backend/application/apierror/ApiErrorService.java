@@ -1,10 +1,10 @@
 package com.icovest.backend.application.apierror;
 
-import com.icovest.backend.dto.ApiError;
-import com.icovest.backend.dto.CustomFieldErrors;
-import com.icovest.backend.dto.FieldErrorDto;
-import com.icovest.backend.dto.SpecificFieldError;
-import com.icovest.backend.errors.ValidationFieldException;
+import com.icovest.baseclass.dto.ApiError;
+import com.icovest.baseclass.dto.CustomFieldErrors;
+import com.icovest.baseclass.dto.FieldErrorDto;
+import com.icovest.baseclass.dto.SpecificFieldError;
+import com.icovest.baseclass.errors.ValidationFieldException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

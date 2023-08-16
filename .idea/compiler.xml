@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="authentication-feature" />
         <module name="user-feature" />
+        <module name="base-class" />
         <module name="front-end" />
         <module name="application" />
         <module name="email-feature" />
@@ -20,6 +21,7 @@
       <module name="application" options="-parameters" />
       <module name="authentication-feature" options="-parameters" />
       <module name="back-end" options="" />
+      <module name="base-class" options="-parameters" />
       <module name="email-feature" options="-parameters" />
       <module name="front-end" options="-parameters" />
       <module name="user-feature" options="-parameters" />

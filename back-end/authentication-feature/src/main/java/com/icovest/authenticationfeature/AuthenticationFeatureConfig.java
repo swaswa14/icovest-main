@@ -1,6 +1,7 @@
 package com.icovest.authenticationfeature;
 
-import com.icovest.backend.errors.AccountDoesNotExistsException;
+import com.icovest.baseclass.BaseClassConfig;
+import com.icovest.baseclass.errors.AccountDoesNotExistsException;
 import com.icovest.backend.userfeature.UserFeatureConfig;
 import com.icovest.backend.userfeature.entity.User;
 import com.icovest.backend.userfeature.entity.UserRepository;
@@ -25,7 +26,7 @@ import java.util.Optional;
 @SpringBootConfiguration
 @EnableAutoConfiguration
 @ComponentScan
-@Import({UserFeatureConfig.class, EmailFeatureConfiguration.class})
+@Import({UserFeatureConfig.class, EmailFeatureConfiguration.class, BaseClassConfig.class})
 @RequiredArgsConstructor
 public class AuthenticationFeatureConfig {
 

@@ -1,7 +1,7 @@
 package com.icovest.backend.application.config;
 
 import com.icovest.backend.application.apierror.ApiErrorService;
-import com.icovest.backend.dto.FieldErrorDto;
+import com.icovest.baseclass.dto.FieldErrorDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;

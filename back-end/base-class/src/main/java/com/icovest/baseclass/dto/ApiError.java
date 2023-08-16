@@ -1,4 +1,4 @@
-package com.icovest.backend.dto;
+package com.icovest.baseclass.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;

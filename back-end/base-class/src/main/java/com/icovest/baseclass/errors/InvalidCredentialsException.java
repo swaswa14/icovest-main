@@ -1,4 +1,4 @@
-package com.icovest.backend.errors;
+package com.icovest.baseclass.errors;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.BadCredentialsException;

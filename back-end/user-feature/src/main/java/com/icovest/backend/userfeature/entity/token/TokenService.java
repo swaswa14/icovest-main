@@ -1,6 +1,6 @@
 package com.icovest.backend.userfeature.entity.token;
 
-import com.icovest.backend.errors.InvalidTokenException;
+import com.icovest.baseclass.errors.InvalidTokenException;
 import com.icovest.backend.userfeature.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

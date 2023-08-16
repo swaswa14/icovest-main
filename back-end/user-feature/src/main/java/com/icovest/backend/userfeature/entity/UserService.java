@@ -1,9 +1,9 @@
 package com.icovest.backend.userfeature.entity;
 
 
-import com.icovest.backend.errors.AccountDoesNotExistsException;
-import com.icovest.backend.errors.InviteCodeDoesNotExistsException;
-import com.icovest.backend.errors.UsernameOrEmailExistsException;
+import com.icovest.baseclass.errors.AccountDoesNotExistsException;
+import com.icovest.baseclass.errors.InviteCodeDoesNotExistsException;
+import com.icovest.baseclass.errors.UsernameOrEmailExistsException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

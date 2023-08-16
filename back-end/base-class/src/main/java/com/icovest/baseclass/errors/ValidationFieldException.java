@@ -1,6 +1,6 @@
-package com.icovest.backend.errors;
+package com.icovest.baseclass.errors;
 
-import com.icovest.backend.dto.FieldErrorDto;
+import com.icovest.baseclass.dto.FieldErrorDto;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;

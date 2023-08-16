@@ -11,21 +11,13 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <artifactId>user-feature</artifactId>
+    <artifactId>base-class</artifactId>
     <version>1.0.0</version>
-    <name>user-feature-module</name>
-    <description>This module is everything about the user Features</description>
-    <dependencies>
-
-
-        <dependency>
-            <groupId>com.icovest</groupId>
-            <artifactId>base-class</artifactId>
-            <version>1.0.0</version>
-            <scope>compile</scope>
-        </dependency>
-    </dependencies>
     <packaging>jar</packaging>
+
+    <name>base-class module</name>
+
+
     <build>
         <resources>
             <resource>
@@ -34,5 +26,4 @@
             </resource>
         </resources>
     </build>
-
 </project>

@@ -1,12 +1,9 @@
 package com.icovest.backend.userfeature.entity;
 
-import com.icovest.backend.enums.Roles;
-import jakarta.annotation.Nullable;
+import com.icovest.baseclass.enums.Roles;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.springframework.data.repository.query.Param;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

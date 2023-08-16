@@ -20,6 +20,7 @@
         <module>user-feature</module>
         <module>email-feature</module>
         <module>authentication-feature</module>
+        <module>base-class</module>
     </modules>
 
     <properties>

@@ -1,7 +1,7 @@
 package com.icovest.backend.application.config;
 
 import com.github.javafaker.Faker;
-import com.icovest.backend.enums.Roles;
+import com.icovest.baseclass.enums.Roles;
 import com.icovest.backend.userfeature.entity.User;
 import com.icovest.backend.userfeature.entity.UserRepository;
 import lombok.RequiredArgsConstructor;

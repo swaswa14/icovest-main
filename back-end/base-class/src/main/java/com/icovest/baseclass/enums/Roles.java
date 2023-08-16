@@ -1,4 +1,4 @@
-package com.icovest.backend.enums;
+package com.icovest.baseclass.enums;
 
 import lombok.Getter;
 

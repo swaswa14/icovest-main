@@ -1,12 +1,11 @@
 package com.icovest.authenticationfeature;
 
 import com.icovest.authenticationfeature.service.AuthenticationService;
-import com.icovest.backend.errors.AccountNotEnabledException;
+import com.icovest.baseclass.errors.AccountNotEnabledException;
 import com.icovest.backend.userfeature.requests.AuthenticationResponse;
 import com.icovest.backend.userfeature.requests.LoginRequest;
 import com.icovest.backend.userfeature.requests.RegistrationRequest;
 import com.icovest.backend.userfeature.requests.RegistrationResponse;
-import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +69,7 @@ public class AuthenticationFeatureTest {
         Assertions.assertThrows(AccountNotEnabledException.class, ()->{
             AuthenticationResponse response = authenticationService.authenticate(loginRequest, mockResponse);
             assert(response != null);
-            
+
         });
 
     }

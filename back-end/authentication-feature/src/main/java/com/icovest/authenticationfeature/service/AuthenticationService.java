@@ -1,12 +1,12 @@
 package com.icovest.authenticationfeature.service;
 
-import com.icovest.backend.enums.Roles;
-import com.icovest.backend.errors.*;
+import com.icovest.baseclass.enums.Roles;
 import com.icovest.backend.userfeature.entity.*;
 import com.icovest.backend.userfeature.entity.token.TokenService;
 import com.icovest.backend.userfeature.entity.token.TokenType;
 import com.icovest.backend.userfeature.entity.token.UserToken;
 import com.icovest.backend.userfeature.requests.*;
+import com.icovest.baseclass.errors.*;
 import com.icovest.emailfeature.EmailFeatureService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
