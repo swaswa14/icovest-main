@@ -32,12 +32,12 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
 //                .exceptionHandling(exception -> exception.authenticationEntryPoint(globalExceptionHandler))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(publicEndPoint).permitAll()
-//                        .requestMatchers(superAdminEndPoint).hasAuthority("Admin")
-//                        .requestMatchers(agentEndpoint).hasAuthority("Agent")
-//                        .requestMatchers(clientEndPoint).hasAuthority("Client")
-                        .anyRequest().authenticated())
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers(publicEndPoint).permitAll()
+////                        .requestMatchers(superAdminEndPoint).hasAuthority("Admin")
+////                        .requestMatchers(agentEndpoint).hasAuthority("Agent")
+////                        .requestMatchers(clientEndPoint).hasAuthority("Client")
+//                        .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
 //                .addFilterBefore(roleBasedAuthFilter, JwtAuthFilter.class)
                 .authenticationProvider(authenticationProvider);

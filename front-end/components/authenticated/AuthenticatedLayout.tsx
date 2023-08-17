@@ -1,6 +1,6 @@
 import LogoBranding from '@/components/authenticated/LogoBranding'
 import { ReactNode } from 'react'
-import { useApplicationContext } from '@/context/ApplicationProvider'
+import {} from '@/context/ApplicationProvider'
 
 import PageRedirect from '@/components/PageRedirect'
 import { UserDto } from '@/components/login/useLogin'
