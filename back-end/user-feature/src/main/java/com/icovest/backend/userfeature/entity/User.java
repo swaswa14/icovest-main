@@ -8,6 +8,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -42,14 +43,20 @@ public class User implements UserDetails {
 
     @Builder.Default
     private boolean isEnabled = false;
-    @Transient
+
+
+    @ElementCollection(targetClass = Roles.class, fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)  // Store enum as a string (e.g. "ADMIN", "USER", etc.)
+    @CollectionTable(name = "user_roles")  // Name of the table to store the mapping
+    @Column(name = "role")
     private List <Roles> roles = new ArrayList<>();
 
     @Column(unique = true)
     private String inviteCode;
 
     @Embedded
-    private Usdt usdt;
+    @Builder.Default
+    private Usdt usdt = Usdt.builder().balance(BigDecimal.valueOf(0.00)).build();
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles.stream()

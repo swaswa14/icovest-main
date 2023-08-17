@@ -11,6 +11,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -50,6 +51,25 @@ public class UserService implements UserDetailsService {
         );
     }
 
+    public User findUserByUsernameOrEmail(String usernameOrEmail){
+        Optional<User> userByUsername = repository.findUserByUsername(usernameOrEmail);
+
+        // If a user is found by their username, return it
+        if (userByUsername.isPresent()) {
+            return userByUsername.get();
+        }
+
+        // If not, try to find the user by their email
+        Optional<User> userByEmail = repository.findUserByEmail(usernameOrEmail);
+
+        // If a user is found by their email, return it
+        if (userByEmail.isPresent()) {
+            return userByEmail.get();
+        }
+
+        // If no user is found by either their username or email, throw an exception
+        throw new AccountDoesNotExistsException();
+    }
     public List<UserDto> findAll(){
         return repository.findAll()
                 .stream()
@@ -76,9 +96,25 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String usernameOrEmail) throws UsernameNotFoundException {
-        return repository.findUserByUsername(usernameOrEmail).orElse(
-                repository.findUserByEmail(usernameOrEmail).orElseThrow(AccountDoesNotExistsException::new)
-        );
+            // First, try to find the user by their username
+            Optional<User> userByUsername = repository.findUserByUsername(usernameOrEmail);
+
+            // If a user is found by their username, return it
+            if (userByUsername.isPresent()) {
+                return userByUsername.get();
+            }
+
+            // If not, try to find the user by their email
+            Optional<User> userByEmail = repository.findUserByEmail(usernameOrEmail);
+
+            // If a user is found by their email, return it
+            if (userByEmail.isPresent()) {
+                return userByEmail.get();
+            }
+
+            // If no user is found by either their username or email, throw an exception
+            throw new AccountDoesNotExistsException();
+
     }
 
 

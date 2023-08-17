@@ -1,6 +1,7 @@
 package com.icovest.backend.application.config;
 
 import com.github.javafaker.Faker;
+import com.icovest.backend.userfeature.entity.UserService;
 import com.icovest.baseclass.enums.Roles;
 import com.icovest.backend.userfeature.entity.User;
 import com.icovest.backend.userfeature.entity.UserRepository;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -20,16 +22,31 @@ import java.util.UUID;
 public class ApplicationConfig {
 
     private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final UserService userService;
 
     @Bean
     CommandLineRunner commandLineRunner(@Autowired Faker faker){
         return args ->{
             log.info("Application started");
+            User swa = User.builder()
+                    .inviteCode(userService.createInviteCode())
+                    .roles(Arrays.asList(Roles.BASIC_ACCESS, Roles.CLIENT_ACCESS))
+                    .username("client")
+                    .email("client@yopmail.com")
+                    .isEnabled(true)
+                    .password(passwordEncoder.encode("password"))
+                    .build();
+            log.info("User: {}", userRepository.save(swa));
 
             for(int i = 0; i < 10; i++){
                 User user = User.builder()
-                        .inviteCode(UUID.randomUUID().toString())
+                        .inviteCode(userService.createInviteCode())
                         .roles(Arrays.asList(Roles.BASIC_ACCESS, Roles.CLIENT_ACCESS))
+                        .username(faker.name().username())
+                        .email(faker.internet().emailAddress())
+                        .isEnabled(true)
+                        .password(passwordEncoder.encode("Password123"))
                         .build();
                 log.info("User: {}", userRepository.save(user));
             }

@@ -10,6 +10,7 @@ import com.icovest.baseclass.errors.*;
 import com.icovest.emailfeature.EmailFeatureService;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -104,20 +105,21 @@ public class AuthenticationService {
     public AuthenticationResponse authenticate(LoginRequest request, HttpServletResponse response) {
         log.info("Authenticating user: {}", request);
 
-        final String usernameOrEmail = request.getUsernameOrEmail().toLowerCase();
-        final String password = request.getPassword();
+        final String usernameOrEmail = request.getUser().toLowerCase();
+        final String password = request.getPass();
 
-        UserDto userDto = userService.findByUsernameOrEmail(usernameOrEmail);
+        User user = userService.findUserByUsernameOrEmail(usernameOrEmail);
+
         try {
             final Authentication authentication = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(
-                            request.getUsernameOrEmail(),
-                            request.getPassword()
+                            user.getUsername(),
+                            password
                     ));
 
+            log.info("Authentication: {}", authentication);
 
-
-            String jwtToken = jwtService.generateToken(userService.loadUserByUsername(request.getUsernameOrEmail()));
+            String jwtToken = jwtService.generateToken(user);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
             Cookie jwtCookie = new Cookie("jwt", jwtToken);
@@ -126,9 +128,11 @@ public class AuthenticationService {
             jwtCookie.setMaxAge(3600);
             response.addCookie(jwtCookie);
 
+            log.info("Authenticated user {}", user);
+
             return AuthenticationResponse.builder()
                     .message("You have been authenticated successfully")
-                    .userDto(userDto)
+                    .userDto(userMapperService.apply(user))
                     .build();
         }catch (DisabledException e){
             throw new AccountNotEnabledException();
@@ -186,4 +190,32 @@ public class AuthenticationService {
         }
     }
 
+    public UserDto getAuthenticatedUser(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+
+                if (cookie.getName().equals("jwt")) {
+                    String jwt = cookie.getValue();
+                    String username = jwtService.extractUsername(jwt);
+                    log.info("-----------------------");
+                    log.info("username " + username);
+                    log.info("Cookie name " + cookie.getName());
+                    log.info("Cookie value " + cookie.getValue());
+                    log.info("-----------------------");
+                    User user =
+                            userRepository.findUserByUsername(username).orElseThrow(AccountDoesNotExistsException::new);
+
+                    log.info("Authenticated User {}", user);
+
+                    return userMapperService.apply(user);
+
+                }
+            }
+        }else{
+            return null;
+        }
+
+        return null;
+    }
 }

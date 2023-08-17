@@ -6,10 +6,14 @@ import React, {
     useEffect,
     useState,
 } from 'react'
+import { UserDto } from '@/components/login/useLogin'
+import { getAuthenticatedUser } from '@/service/AuthenticationService'
 
 export interface ApplicationContextValue {
     mode: 'dark' | 'light'
     setMode: Dispatch<SetStateAction<'dark' | 'light'>>
+    userDto: UserDto | undefined
+    setUserDto: Dispatch<SetStateAction<UserDto | undefined>>
 }
 
 export const ApplicationContext = createContext<ApplicationContextValue | null>(
@@ -34,9 +38,13 @@ export const ApplicationContextProvider = ({
     children,
 }: ApplicationContextProviderProps) => {
     const [mode, setMode] = useState<'dark' | 'light'>('light')
+    // @ts-ignore
+    const [userDto, setUserDto] = useState<UserDto>()
     const value: ApplicationContextValue = {
         mode,
         setMode,
+        userDto,
+        setUserDto,
     }
 
     useEffect(() => {
@@ -49,6 +57,21 @@ export const ApplicationContextProvider = ({
                 setMode(storedMode)
             }
         }
+    }, [])
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const user = await getAuthenticatedUser()
+
+            return user
+        }
+        fetchData()
+            .then((user) => {
+                setUserDto(user)
+            })
+            .finally(() => {
+                console.log('User fetched')
+            })
     }, [])
 
     return (

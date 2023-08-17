@@ -62,8 +62,8 @@ public class AuthenticationFeatureTest {
         });
 
         LoginRequest loginRequest = LoginRequest.builder()
-                        .usernameOrEmail("swaswa123")
-                                .password("Superswa123..")
+                        .user("swaswa123")
+                                .pass("Superswa123..")
                                         .build();
         MockHttpServletResponse mockResponse = new MockHttpServletResponse();
         Assertions.assertThrows(AccountNotEnabledException.class, ()->{
