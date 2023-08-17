@@ -3,6 +3,7 @@ package com.icovest.backend.application.controller;
 import com.icovest.authenticationfeature.service.AuthenticationService;
 import com.icovest.backend.userfeature.entity.UserDto;
 import com.icovest.backend.userfeature.requests.*;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -65,5 +66,18 @@ public class AuthenticationController {
     public ResponseEntity<Mono<UserDto>> getAuthenticatedUser(HttpServletRequest request){
         log.info("Get Authenticated User Request");
         return ResponseEntity.ok(Mono.just(authenticationService.getAuthenticatedUser(request)));
+    }
+
+
+    @GetMapping("/logout")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<String> logout(HttpServletResponse response) {
+        log.info("Logout Request");
+        Cookie cookie = new Cookie("jwt", null); // Make sure to replace "cookieName" with the name of your actual
+        // cookie
+        cookie.setMaxAge(0);
+        cookie.setPath("/"); // This is important to make sure the cookie gets deleted for all paths
+        response.addCookie(cookie);
+        return ResponseEntity.status(HttpStatus.OK).body("User logged out and cookie deleted");
     }
 }
