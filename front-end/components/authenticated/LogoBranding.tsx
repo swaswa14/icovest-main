@@ -47,7 +47,7 @@ export default function LogoBranding() {
             >
                 <p className={'hidden sm:block'}>Flowbite</p>
             </Sidebar.Logo>
-            <Sidebar.Items className="w-auto sm:w-full">
+            <Sidebar.Items>
                 <Sidebar.ItemGroup>
                     <Sidebar.Item
                         href="#"
