@@ -2,10 +2,11 @@ package com.icovest.baseclass.dto;
 
 import org.springframework.http.HttpStatus;
 
-import java.util.Map;
+import java.util.List;
+
 
 public record FieldErrorDto(int numberOfErrors,
-                            Map<String, SpecificFieldError> errorMaps,
+                            List<SpecificFieldError> errorList,
                             HttpStatus status,
                             String exception) {
 }

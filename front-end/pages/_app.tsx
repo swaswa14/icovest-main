@@ -53,7 +53,7 @@ const ChildComponent = ({ children }: ChildComponentProps) => {
         if (data) {
             setUserDto(data)
         }
-    }, [userDto])
+    }, [userDto, setUserDto, data])
     const Layout = ({ children }: ChildComponentProps) => {
         if (router.pathname.includes('/my')) {
             return (

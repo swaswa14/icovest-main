@@ -20,6 +20,8 @@ export default function RegisterWrapper() {
         onSubmit,
         onChanged,
         checked,
+        registerSchema,
+        registerResponse,
     } = useRegister()
     return (
         <AuthenticationContainer
@@ -31,17 +33,31 @@ export default function RegisterWrapper() {
                 className="space-y-2 md:space-y-2"
                 onSubmit={handleSubmit(onSubmit)}
             >
-                {isSubmitSuccessful ? (
+                {isSubmitSuccessful && registerResponse ? (
                     <>
-                        <h5 className={'text-gray-700'}>
+                        <p
+                            className={
+                                'text-xl font-bold text-gray-900 dark:text-gray-50'
+                            }
+                        >
+                            {registerResponse.header}
                             {/* eslint-disable-next-line react/no-unescaped-entities */}
-                            Success! We've sent an email with password reset
-                            instructions to your inbox.
-                        </h5>
+                        </p>
                         <br />
-                        <p>
-                            Please check your email and follow the steps to
-                            reset your password.
+                        <p
+                            className={
+                                'text-md font-light text-gray-900 dark:text-gray-50'
+                            }
+                        >
+                            {registerResponse.body}
+                        </p>
+                        <br />
+                        <p
+                            className={
+                                'text-sm font-light text-gray-900 dark:text-gray-50'
+                            }
+                        >
+                            {registerResponse.footer}
                         </p>
                     </>
                 ) : (
@@ -57,7 +73,8 @@ export default function RegisterWrapper() {
                                 icon={MdEmail}
                                 type="email"
                                 id="register-email"
-                                placeholder="name@company.com"
+                                placeholder="username@company.com"
+                                defaultValue="client@yopmail.com"
                                 required
                                 sizing={'sm'}
                                 className={
@@ -77,7 +94,7 @@ export default function RegisterWrapper() {
                         </div>
                         <div>
                             <label
-                                htmlFor="icovest-name"
+                                htmlFor="icovest-username"
                                 className="text-sm font-medium text-gray-500 dark:text-white"
                             >
                                 Username
@@ -85,23 +102,26 @@ export default function RegisterWrapper() {
                             <TextInput
                                 icon={BsFillFilePersonFill}
                                 type="text"
-                                id="icovest-name"
+                                id="icovest-username"
                                 placeholder="john.doe"
+                                defaultValue="client"
                                 sizing={'sm'}
                                 required
-                                autoComplete={'new-name'}
+                                autoComplete={'new-username'}
                                 className={
                                     'bg-gray-50 border border-gray-300 text-gray-900 rounded-lg'
                                 }
                                 color={
-                                    errors.name?.message ? 'failure' : 'gray'
+                                    errors.username?.message
+                                        ? 'failure'
+                                        : 'gray'
                                 }
-                                {...register('name')}
+                                {...register('username')}
                                 disabled={isSubmitting}
                             />
-                            {errors.name?.message && (
+                            {errors.username?.message && (
                                 <FieldErrorMessage>
-                                    {errors.name?.message}
+                                    {errors.username?.message}
                                 </FieldErrorMessage>
                             )}
                         </div>
@@ -117,6 +137,7 @@ export default function RegisterWrapper() {
                                 autoComplete={'new-password'}
                                 icon={RiLockPasswordLine}
                                 type="password"
+                                defaultValue="Password123"
                                 id="icovest-password"
                                 placeholder="Enter your password"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg"
@@ -147,6 +168,7 @@ export default function RegisterWrapper() {
                                 icon={RiLockPasswordLine}
                                 type="password"
                                 id="verify-password"
+                                defaultValue="Password123"
                                 placeholder="Confirm your password"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg"
                                 required
@@ -177,21 +199,22 @@ export default function RegisterWrapper() {
                                 icon={AiOutlineNumber}
                                 type="number"
                                 id="invite-code"
-                                placeholder="123456"
+                                defaultValue={123456}
+                                placeholder=""
                                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg"
                                 autoComplete={'off'}
                                 style={{ appearance: 'textfield' }}
                                 color={
-                                    errors.inviteCode?.message
+                                    errors.invitationCode?.message
                                         ? 'failure'
                                         : 'gray'
                                 }
-                                {...register('inviteCode')}
+                                {...register('invitationCode')}
                                 disabled={isSubmitting}
                             />
-                            {errors.inviteCode?.message && (
+                            {errors.invitationCode?.message && (
                                 <FieldErrorMessage>
-                                    {errors.inviteCode?.message}
+                                    {errors.invitationCode?.message}
                                 </FieldErrorMessage>
                             )}
                         </div>
@@ -201,7 +224,7 @@ export default function RegisterWrapper() {
                         >
                             <div className="flex items-center gap-2">
                                 <Checkbox
-                                    onClick={(e) => {
+                                    onClick={() => {
                                         onChanged()
                                     }}
                                     id="accept"

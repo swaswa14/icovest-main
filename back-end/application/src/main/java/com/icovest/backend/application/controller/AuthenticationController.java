@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -33,9 +34,9 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public Mono<RegistrationResponse> register(@Valid @RequestBody RegistrationRequest request){
+    public ResponseEntity<Mono<RegistrationResponse>> register(@Valid @RequestBody RegistrationRequest request){
         log.info("Register Request {}", request);
-        return Mono.just(authenticationService.register(request));
+        return ResponseEntity.ok(Mono.just(authenticationService.register(request)));
     }
 
     @GetMapping("/enable")

@@ -1,9 +1,15 @@
 package com.icovest.backend.userfeature.entity;
 
+import com.icovest.backend.userfeature.entity.validators.UniqueEntity;
 import com.icovest.baseclass.enums.Roles;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -37,6 +43,7 @@ public class User implements UserDetails {
             generator = "base_sequence"
     )
     private Long id;
+
     private String email;
     private String username;
     private String password;

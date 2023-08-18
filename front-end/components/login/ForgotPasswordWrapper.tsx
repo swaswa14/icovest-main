@@ -52,7 +52,7 @@ export default function ForgotPasswordWrapper() {
                             icon={MdEmail}
                             type="email"
                             id="email"
-                            placeholder="name@company.com"
+                            placeholder="username@company.com"
                             required
                             className={
                                 'bg-gray-50 border border-gray-300 text-gray-900 rounded-lg'

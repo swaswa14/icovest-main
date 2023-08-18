@@ -3,19 +3,50 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import useAuthentication from '@/components/login/useAuthentication'
+import {
+    FormErrorDto,
+    registerUser,
+    RegistrationRequest,
+    RegistrationResponse,
+} from '@/service/AuthenticationService'
+import { useMutation } from '@tanstack/react-query'
+import {} from '@/service/ApiError'
 
 export default function useRegister() {
     const { registerSchema } = useAuthentication()
-
+    const [registerResponse, setRegisterResponse] =
+        useState<RegistrationResponse>()
     const [checked, setChecked] = useState(false)
     type RegisterSchema = z.infer<typeof registerSchema>
     const {
         register,
         handleSubmit,
+        setError,
         formState: { errors, isSubmitting, isSubmitSuccessful },
     } = useForm<RegisterSchema>({
         mode: 'onChange',
         resolver: zodResolver(registerSchema),
+    })
+
+    const mutation = useMutation(registerUser, {
+        onMutate: async (request: RegistrationRequest) => {
+            const response = await registerUser(request)
+            console.log('registration response', response)
+            if (response.status === 201) {
+                setRegisterResponse(await response.json())
+            } else if (response.status === 422) {
+                const errorResponse: FormErrorDto = await response.json()
+
+                // Set the errors in the form
+                errorResponse.errorList.forEach((err) => {
+                    // @ts-ignore
+                    setError(err.fieldName, {
+                        type: 'manual',
+                        message: err.errorMessage,
+                    })
+                })
+            }
+        },
     })
 
     const onSubmit: SubmitHandler<RegisterSchema> = async (schema) => {
@@ -25,8 +56,38 @@ export default function useRegister() {
                 resolve(schema)
             }, 3000)
         })
-    }
 
+        const request: RegistrationRequest = {
+            email: schema.email,
+            username: schema.username,
+            password: schema.password,
+            invitationCode: schema.invitationCode,
+        }
+        try {
+            const response = await fetch('/api/v1/auth/register', {
+                method: 'POST',
+                credentials: 'include',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(request),
+            })
+
+            if (response.status === 201) {
+                setRegisterResponse(await response.json())
+            } else if (response.status === 422) {
+                const errorResponse: FormErrorDto = await response.json()
+
+                // Set the errors in the form
+                errorResponse.errorList.forEach((err) => {
+                    // @ts-ignore
+                    setError(err.fieldName, {
+                        message: err.errorMessage,
+                    })
+                })
+            }
+        } catch (error) {
+            console.error('Error while registering:', error)
+        }
+    }
     const onChanged = () => {
         setChecked(!checked)
     }
@@ -40,5 +101,8 @@ export default function useRegister() {
         onSubmit,
         checked,
         onChanged,
+        registerResponse,
+        mutation,
+        registerSchema,
     }
 }

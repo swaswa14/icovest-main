@@ -2,6 +2,7 @@ import useAuthentication from '@/components/login/useAuthentication'
 import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from 'next/router'
 
 export interface AuthenticationResponse {
     message: string
@@ -22,6 +23,7 @@ export interface Usdt {
 
 export default function useLogin() {
     const { loginSchema } = useAuthentication()
+    const router = useRouter()
     type LoginSchema = z.infer<typeof loginSchema>
     const {
         register,
@@ -54,6 +56,7 @@ export default function useLogin() {
             if (response.ok) {
                 const data = await response.json()
                 console.log(data.message)
+                router.push('/my')
             } else {
                 setError('pass', { message: ' ' })
                 setError('user', { message: ' ' })

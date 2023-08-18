@@ -42,9 +42,9 @@ export default function useAuthentication() {
     //     }
     // )
 
-    const inviteCode = z.string().optional()
+    const invitationCode = z.string().optional()
 
-    const name = z.string().min(1, { message: 'username is required' })
+    const username = z.string().min(1, { message: 'username is required' })
 
     const user = z.string().min(1, { message: 'username/email is required' })
     const pass = z.string().min(1, { message: 'Password is required' })
@@ -57,10 +57,10 @@ export default function useAuthentication() {
     const registerSchema = z
         .object({
             email,
-            name,
+            username,
             password,
             verifyPassword,
-            inviteCode,
+            invitationCode,
         })
         .refine(
             (data) => {

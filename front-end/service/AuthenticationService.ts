@@ -36,6 +36,44 @@ export const logout = async (): Promise<string | undefined> => {
         }
     } catch (error) {
         console.error('Error while logging out:', error)
-        return 'Error while logging out'
     }
+}
+
+export interface RegistrationRequest {
+    email: string
+    username: string
+    password: string
+    invitationCode?: string
+}
+export interface RegistrationResponse {
+    header: string
+    body: string
+    footer: string
+}
+
+export interface SpecificFieldError {
+    fieldName: string
+    rejectedValue: string
+    errorMessage: string
+    exceptionName: string
+    constraint: string
+}
+
+export interface FormErrorDto {
+    numberOfErrors: number
+    errorList: SpecificFieldError[]
+    status: string
+    exception: string
+}
+export const registerUser = async (
+    request: RegistrationRequest
+): Promise<Response> => {
+    console.log('register request ', request)
+    const response = await fetch('/api/v1/auth/register', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(request),
+    })
+    return response
 }
