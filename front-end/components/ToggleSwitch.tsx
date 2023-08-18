@@ -42,7 +42,10 @@ export default function ToggleSwitch({
                 value=""
                 className="sr-only peer"
                 id={id}
-                onClick={onToggle}
+                onClick={(e) => {
+                    e.preventDefault()
+                    onToggle()
+                }}
                 defaultChecked={checked}
             />
             <div className={`${divClass}`}></div>

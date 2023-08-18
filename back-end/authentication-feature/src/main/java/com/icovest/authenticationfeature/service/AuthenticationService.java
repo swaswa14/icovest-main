@@ -91,7 +91,7 @@ public class AuthenticationService {
 
                 return RegistrationResponse.builder()
                         .header("Registration Status")
-                        .body("An email has been sent to " + email + " . Please click on the link to activate your account.")
+                        .body(email)
                         .footer("Thank you for registering with us")
                         .build();
             } catch (MessagingException e) {

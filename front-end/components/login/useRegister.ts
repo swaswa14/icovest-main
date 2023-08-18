@@ -18,6 +18,7 @@ export default function useRegister() {
         useState<RegistrationResponse>()
     const [checked, setChecked] = useState(false)
     type RegisterSchema = z.infer<typeof registerSchema>
+
     const {
         register,
         handleSubmit,
@@ -26,27 +27,6 @@ export default function useRegister() {
     } = useForm<RegisterSchema>({
         mode: 'onChange',
         resolver: zodResolver(registerSchema),
-    })
-
-    const mutation = useMutation(registerUser, {
-        onMutate: async (request: RegistrationRequest) => {
-            const response = await registerUser(request)
-            console.log('registration response', response)
-            if (response.status === 201) {
-                setRegisterResponse(await response.json())
-            } else if (response.status === 422) {
-                const errorResponse: FormErrorDto = await response.json()
-
-                // Set the errors in the form
-                errorResponse.errorList.forEach((err) => {
-                    // @ts-ignore
-                    setError(err.fieldName, {
-                        type: 'manual',
-                        message: err.errorMessage,
-                    })
-                })
-            }
-        },
     })
 
     const onSubmit: SubmitHandler<RegisterSchema> = async (schema) => {
@@ -102,7 +82,5 @@ export default function useRegister() {
         checked,
         onChanged,
         registerResponse,
-        mutation,
-        registerSchema,
     }
 }
