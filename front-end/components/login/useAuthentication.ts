@@ -8,7 +8,9 @@ export default function useAuthentication() {
 
     const password = z
         .string()
-        .min(8, { message: 'Minimum of 8 characters' })
+        .min(8, {
+            message: 'Password must be at least a minimum of 8 characters',
+        })
         .refine(
             (value) => {
                 return (
@@ -25,26 +27,26 @@ export default function useAuthentication() {
 
     const verifyPassword = z
         .string()
-        .min(8, { message: 'Minimum of 8 characters' })
-        .refine(
-            (value) => {
-                return (
-                    value.match(/[a-z]/g) &&
-                    value.match(/[A-Z]/g) &&
-                    value.match(/[0-9]/g)
-                )
-            },
-            {
-                message:
-                    'Password must contain at least one uppercase letter, one lowercase letter, and one number',
-            }
-        )
+        .min(1, { message: 'Verify your password' })
+    // .refine(
+    //     (value) => {
+    //         return (
+    //             value.match(/[a-z]/g) &&
+    //             value.match(/[A-Z]/g) &&
+    //             value.match(/[0-9]/g)
+    //         )
+    //     },
+    //     {
+    //         message:
+    //             'Password must contain at least one uppercase letter, one lowercase letter, and one number',
+    //     }
+    // )
 
-    const inviteCode = z.number().min(1, { message: 'Invite code is required' })
+    const inviteCode = z.string().optional()
 
-    const name = z.string().min(1, { message: 'Name is required' })
+    const name = z.string().min(1, { message: 'username is required' })
 
-    const user = z.string().min(1, { message: 'Email is required' })
+    const user = z.string().min(1, { message: 'username/email is required' })
     const pass = z.string().min(1, { message: 'Password is required' })
 
     const loginSchema = z.object({
@@ -55,9 +57,9 @@ export default function useAuthentication() {
     const registerSchema = z
         .object({
             email,
+            name,
             password,
             verifyPassword,
-            name,
             inviteCode,
         })
         .refine(

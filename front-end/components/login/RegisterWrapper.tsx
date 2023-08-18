@@ -8,6 +8,7 @@ import Link from 'next/link'
 import { AiOutlineNumber } from 'react-icons/ai'
 import useRegister from '@/components/login/useRegister'
 import FormButton from '@/components/FormButton'
+import FieldErrorMessage from '@/components/FieldErrorMessage'
 
 export default function RegisterWrapper() {
     const {
@@ -29,7 +30,6 @@ export default function RegisterWrapper() {
             <form
                 className="space-y-2 md:space-y-2"
                 onSubmit={handleSubmit(onSubmit)}
-                autoComplete={'off'}
             >
                 {isSubmitSuccessful ? (
                     <>
@@ -48,18 +48,18 @@ export default function RegisterWrapper() {
                     <>
                         <div>
                             <label
-                                htmlFor="email"
-                                className="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
+                                htmlFor="register-email"
+                                className="text-sm font-medium text-gray-500 dark:text-white"
                             >
-                                Your email
+                                Email
                             </label>
                             <TextInput
                                 icon={MdEmail}
                                 type="email"
-                                id="email"
+                                id="register-email"
                                 placeholder="name@company.com"
                                 required
-                                autoComplete={'new-email'}
+                                sizing={'sm'}
                                 className={
                                     'bg-gray-50 border border-gray-300 text-gray-900 rounded-lg'
                                 }
@@ -70,23 +70,24 @@ export default function RegisterWrapper() {
                                 disabled={isSubmitting}
                             />
                             {errors.email?.message && (
-                                <p className={'text-red-600'}>
+                                <FieldErrorMessage>
                                     {errors.email?.message}
-                                </p>
+                                </FieldErrorMessage>
                             )}
                         </div>
                         <div>
                             <label
                                 htmlFor="icovest-name"
-                                className="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
+                                className="text-sm font-medium text-gray-500 dark:text-white"
                             >
-                                Your name
+                                Username
                             </label>
                             <TextInput
                                 icon={BsFillFilePersonFill}
                                 type="text"
                                 id="icovest-name"
-                                placeholder="John Doe"
+                                placeholder="john.doe"
+                                sizing={'sm'}
                                 required
                                 autoComplete={'new-name'}
                                 className={
@@ -99,19 +100,20 @@ export default function RegisterWrapper() {
                                 disabled={isSubmitting}
                             />
                             {errors.name?.message && (
-                                <p className={'text-red-600'}>
+                                <FieldErrorMessage>
                                     {errors.name?.message}
-                                </p>
+                                </FieldErrorMessage>
                             )}
                         </div>
                         <div>
                             <label
                                 htmlFor="icovest-password"
-                                className="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
+                                className="text-sm font-medium text-gray-500 dark:text-white"
                             >
                                 Password
                             </label>
                             <TextInput
+                                sizing={'sm'}
                                 autoComplete={'new-password'}
                                 icon={RiLockPasswordLine}
                                 type="password"
@@ -124,23 +126,24 @@ export default function RegisterWrapper() {
                                         ? 'failure'
                                         : 'gray'
                                 }
-                                {...register('email')}
+                                {...register('password')}
                                 disabled={isSubmitting}
                             />
                             {errors.password?.message && (
-                                <p className={'text-red-600'}>
+                                <FieldErrorMessage>
                                     {errors.password?.message}
-                                </p>
+                                </FieldErrorMessage>
                             )}
                         </div>
                         <div>
                             <label
                                 htmlFor="verify-password"
-                                className="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
+                                className="text-sm font-medium text-gray-500 dark:text-white"
                             >
-                                Confirm password
+                                Verify Password
                             </label>
                             <TextInput
+                                sizing={'sm'}
                                 icon={RiLockPasswordLine}
                                 type="password"
                                 id="verify-password"
@@ -157,25 +160,25 @@ export default function RegisterWrapper() {
                                 disabled={isSubmitting}
                             />
                             {errors.verifyPassword?.message && (
-                                <p className={'text-red-600'}>
+                                <FieldErrorMessage>
                                     {errors.verifyPassword?.message}
-                                </p>
+                                </FieldErrorMessage>
                             )}
                         </div>
                         <div>
                             <label
                                 htmlFor="invite-code"
-                                className="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
+                                className=" text-sm font-medium text-gray-500 dark:text-white"
                             >
-                                Invitation code
+                                Invitation code(Optional)
                             </label>
                             <TextInput
+                                sizing={'sm'}
                                 icon={AiOutlineNumber}
                                 type="number"
                                 id="invite-code"
                                 placeholder="123456"
                                 className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg"
-                                required
                                 autoComplete={'off'}
                                 style={{ appearance: 'textfield' }}
                                 color={
@@ -187,9 +190,9 @@ export default function RegisterWrapper() {
                                 disabled={isSubmitting}
                             />
                             {errors.inviteCode?.message && (
-                                <p className={'text-red-600'}>
+                                <FieldErrorMessage>
                                     {errors.inviteCode?.message}
-                                </p>
+                                </FieldErrorMessage>
                             )}
                         </div>
                         <div
@@ -197,8 +200,13 @@ export default function RegisterWrapper() {
                             id="checkbox"
                         >
                             <div className="flex items-center gap-2">
-                                <Checkbox onClick={onChanged} id="accept" />
-                                <Label className="flex" htmlFor="agree">
+                                <Checkbox
+                                    onClick={(e) => {
+                                        onChanged()
+                                    }}
+                                    id="accept"
+                                />
+                                <Label className="flex" htmlFor="accept">
                                     <p
                                         className={
                                             'text-sm font-medium text-gray-500 dark:text-white'

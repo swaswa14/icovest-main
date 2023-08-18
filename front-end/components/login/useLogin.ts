@@ -2,7 +2,6 @@ import useAuthentication from '@/components/login/useAuthentication'
 import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useApplicationContext } from '@/context/ApplicationProvider'
 
 export interface AuthenticationResponse {
     message: string
@@ -23,12 +22,12 @@ export interface Usdt {
 
 export default function useLogin() {
     const { loginSchema } = useAuthentication()
-    const { setUserDto } = useApplicationContext()
     type LoginSchema = z.infer<typeof loginSchema>
     const {
         register,
         handleSubmit,
         formState: { errors, isSubmitting, isSubmitSuccessful },
+        setError,
     } = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema),
     })
@@ -54,11 +53,10 @@ export default function useLogin() {
             // Assuming you'd want to check the response, for example:
             if (response.ok) {
                 const data = await response.json()
-                console.log(data)
-                console.log('authenticated user , ', data.userDto)
-                setUserDto(data.userDto)
+                console.log(data.message)
             } else {
-                console.error('Failed to login:', response.statusText)
+                setError('pass', { message: ' ' })
+                setError('user', { message: ' ' })
             }
         } catch (error) {
             console.error('Error while logging in:', error)

@@ -69,6 +69,9 @@ export const ApplicationContextProvider = ({
             .then((user) => {
                 setUserDto(user)
             })
+            .catch((error) => {
+                console.log(error)
+            })
             .finally(() => {
                 console.log('User fetched')
             })

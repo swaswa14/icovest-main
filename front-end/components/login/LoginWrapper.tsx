@@ -32,18 +32,19 @@ export default function LoginWrapper() {
                         <div>
                             <label
                                 htmlFor="email"
-                                className="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
+                                className="text-sm font-medium text-gray-500 dark:text-white hidden"
                             >
-                                Email Address
+                                username/email
                             </label>
                             <TextInput
                                 icon={MdEmail}
-                                type="email"
+                                type="text"
                                 id="email"
-                                placeholder="name@company.com"
+                                sizing={'sm'}
                                 required
+                                placeholder="username/email"
                                 className={
-                                    'bg-gray-50 border border-gray-300 text-gray-900 rounded-lg'
+                                    'bg-gray-50 border border-gray-300 text-gray-900 rounded-lg '
                                 }
                                 color={
                                     errors.user?.message ? 'failure' : 'gray'
@@ -81,15 +82,16 @@ export default function LoginWrapper() {
                         <div>
                             <label
                                 htmlFor="pass"
-                                className="block mb-2 text-sm font-medium text-gray-500 dark:text-white"
+                                className="text-sm font-medium text-gray-500 dark:text-white hidden"
                             >
-                                Your email
+                                password
                             </label>
                             <TextInput
                                 icon={RiLockPasswordFill}
                                 type="password"
                                 id="pass"
-                                placeholder="••••••••"
+                                sizing={'sm'}
+                                placeholder="password"
                                 required
                                 className={
                                     'bg-gray-50 border border-gray-300 text-gray-900 rounded-lg'
@@ -137,6 +139,11 @@ export default function LoginWrapper() {
                             isSubmitting={isSubmitting}
                             label={'Log in'}
                         />
+                        {errors.pass?.message?.trim() === '' && errors && (
+                            <p className={'text-red-600 text-center w-full'}>
+                                {'Invalid Credentials'}
+                            </p>
+                        )}
                         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                             Don’t have an account yet?{' '}
                             <Link

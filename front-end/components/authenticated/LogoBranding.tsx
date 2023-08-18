@@ -14,6 +14,8 @@ import { logout } from '@/service/AuthenticationService'
 import { useApplicationContext } from '@/context/ApplicationProvider'
 import { useRouter } from 'next/router'
 
+import ToggleTheme from '@/components/features/toggle-theme-feature/ToggleTheme'
+
 export default function LogoBranding() {
     const { setUserDto } = useApplicationContext()
     const router = useRouter()
@@ -35,10 +37,7 @@ export default function LogoBranding() {
         }
     }
     return (
-        <Sidebar
-            aria-label="Sidebar with logo branding example"
-            className="w-auto sm:w-full"
-        >
+        <Sidebar aria-label="Sidebar with logo branding example">
             <Sidebar.Logo
                 href="#"
                 img="/favicon.svg"
@@ -76,6 +75,9 @@ export default function LogoBranding() {
                     </Sidebar.Item>
                 </Sidebar.ItemGroup>
                 <Sidebar.ItemGroup>
+                    <Sidebar.Item>
+                        <ToggleTheme />
+                    </Sidebar.Item>
                     <Sidebar.Item
                         href="#"
                         icon={HiArrowSmLeft}

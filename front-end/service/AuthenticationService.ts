@@ -10,15 +10,12 @@ export const getAuthenticatedUser = async (): Promise<UserDto | undefined> => {
         })
 
         if (response.ok) {
-            const data = await response.json()
-            console.log(data)
-            console.log('authenticated user , ', data)
-            return data
+            return await response.json()
         } else {
-            console.error('Failed to login:', response.statusText)
+            console.log('Failed to login:', response.statusText)
         }
     } catch (error) {
-        console.error('Error while logging in:', error)
+        console.log('Error while logging in:', error)
     }
 }
 
