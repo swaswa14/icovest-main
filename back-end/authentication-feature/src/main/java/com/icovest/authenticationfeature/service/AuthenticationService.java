@@ -86,9 +86,12 @@ public class AuthenticationService {
             log.info("User saved successfully");
             User registeredUser = userRepository.findById(userDto.id()).orElseThrow(AccountDoesNotExistsException::new);
             try {
-                UserToken userToken = tokenService.userTokenBuilder(registeredUser, TokenType.Enabled_Account, 1, 0, 0);
-                emailFeatureService.sendEmailEnableAccount(userToken.getToken(), registeredUser.getEmail(), userToken.getExpiryDate());
 
+//                UserToken userToken = tokenService.userTokenBuilder(registeredUser, TokenType.Enabled_Account, 1, 0, 0);
+//                emailFeatureService.sendEmailEnableAccount(userToken.getToken(), registeredUser.getEmail(), userToken.getExpiryDate());
+                  String token = jwtService.generateToken(registeredUser);
+
+                    emailFeatureService.sendEmailEnableAccount(token, registeredUser.getEmail(), jwtService.extractExpiration(token));
                 return RegistrationResponse.builder()
                         .header("Registration Status")
                         .body(email)
@@ -143,17 +146,23 @@ public class AuthenticationService {
 
     }
 
-    public RegistrationResponse enableUser(String token) {
-        UserToken userToken = tokenService.findUserTokenByToken(token);
-        User user = userToken.getUser();
-        user.setEnabled(true);
-        userService.saveUser(user);
+    public AccountEnableResponse enableUser(String token) {
+//        UserToken userToken = tokenService.findUserTokenByToken(token);
+//        User user = userToken.getUser();
+//        user.setEnabled(true);
+//        userService.saveUser(user);
+        String username = jwtService.extractUsername(token);
+        boolean isTokenValid = jwtService.isTokenValid(token, userService.loadUserByUsername(username));
 
-        return RegistrationResponse.builder()
-                .header("Account Enabled")
-                .body("Your account has been enabled successfully")
-                .footer("Thank you for registering with us")
+
+        User user = userService.findUserByUsernameOrEmail(username);
+        user.setEnabled(isTokenValid);
+        user = userRepository.saveAndFlush(user);
+        return AccountEnableResponse.builder()
+                .token(token)
+                .expired(isTokenValid)
                 .build();
+
     }
 
     public ForgotPasswordResponse forgotPassword(ForgotPasswordRequest request) {

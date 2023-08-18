@@ -11,6 +11,7 @@ public record UserDto(
         String username,
         String email,
         List<String> authorities,
-        BigDecimal balance
+        BigDecimal balance,
+        String invitationCode
 ) {
 }

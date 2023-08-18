@@ -5,18 +5,26 @@ import { MdDarkMode } from 'react-icons/md'
 import { Tooltip } from 'flowbite-react'
 
 export default function ToggleTheme() {
-    const { checked, toggleTheme, label } = useToggleTheme()
+    const { theme, toggleTheme, label, resolvedTheme, mounted, checked } =
+        useToggleTheme()
 
     return (
         <Tooltip
             content={label}
             placement={'top'}
-            style={checked ? 'dark' : 'light'}
+            style={theme === 'dark' ? 'dark' : 'light'}
         >
             <div>
                 <ToggleSwitch
                     onToggle={toggleTheme}
-                    label={checked ? <MdDarkMode /> : <BsBrightnessHigh />}
+                    label={
+                        mounted &&
+                        (theme === 'dark' || resolvedTheme === 'dark') ? (
+                            <MdDarkMode />
+                        ) : (
+                            <BsBrightnessHigh />
+                        )
+                    }
                     checked={checked}
                     size={'small'}
                 />

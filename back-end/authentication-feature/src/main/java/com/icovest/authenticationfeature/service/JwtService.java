@@ -3,6 +3,7 @@ package com.icovest.authenticationfeature.service;
 
 
 
+import com.icovest.backend.userfeature.entity.User;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -52,7 +53,8 @@ public class JwtService {
                 .setHeaderParam("type", "JWT")
                 .claim("type", "TYPE")
                 .claim("role", userDetails.getAuthorities())
-
+                .claim("enabled", userDetails.isEnabled())
+                .claim("username", userDetails.getUsername())
                 .setClaims(extraClaims)
 
                 .setSubject(userDetails.getUsername())
@@ -68,11 +70,11 @@ public class JwtService {
         return (username.equals(userDetails.getUsername())) && !isTokenExpired(token);
     }
 
-    private boolean isTokenExpired(String token){
+    public boolean isTokenExpired(String token){
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
+    public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
     }
 

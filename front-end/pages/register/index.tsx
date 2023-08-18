@@ -1,7 +1,10 @@
 import PageSeo from '@/components/PageSeo'
 import RegisterWrapper from '@/components/login/RegisterWrapper'
+import { useRouter } from 'next/router'
 
 export default function RegisterPage() {
+    const router = useRouter()
+    const { token, expired } = router.query
     return (
         <>
             <PageSeo
@@ -9,7 +12,7 @@ export default function RegisterPage() {
                 description={'Create an Account'}
                 keywords={['register', 'create account']}
             />
-            <RegisterWrapper />
+            <RegisterWrapper token={token} expired={expired} />
         </>
     )
 }

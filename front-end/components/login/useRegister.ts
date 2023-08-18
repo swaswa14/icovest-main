@@ -5,11 +5,10 @@ import { useState } from 'react'
 import useAuthentication from '@/components/login/useAuthentication'
 import {
     FormErrorDto,
-    registerUser,
     RegistrationRequest,
     RegistrationResponse,
 } from '@/service/AuthenticationService'
-import { useMutation } from '@tanstack/react-query'
+
 import {} from '@/service/ApiError'
 
 export default function useRegister() {

@@ -17,9 +17,9 @@ const config: Config = {
             },
             colors: {
                 primary: {
-                    light: 'teal[700]',
+                    light: '#0f766e',
 
-                    dark: 'slate[700]',
+                    dark: '#334155',
                 },
             },
         },

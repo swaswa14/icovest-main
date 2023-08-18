@@ -1,7 +1,6 @@
 import AuthenticationContainer from '@/components/login/AuthenticationContainer'
 import { Checkbox, Label, TextInput } from 'flowbite-react'
 import { MdEmail } from 'react-icons/md'
-import React from 'react'
 import { BsFillFilePersonFill } from 'react-icons/bs'
 import { RiLockPasswordLine } from 'react-icons/ri'
 import Link from 'next/link'
@@ -9,9 +8,16 @@ import { AiOutlineNumber } from 'react-icons/ai'
 import useRegister from '@/components/login/useRegister'
 import FormButton from '@/components/FormButton'
 import FieldErrorMessage from '@/components/FieldErrorMessage'
-import SuccessRegisterMessage from '@/components/login/SuccessRegisterMessage'
+import React from 'react'
 
-export default function RegisterWrapper() {
+export interface RegisterWrapperProps {
+    token?: string | string[] | undefined
+    expired?: string | string[] | undefined
+}
+export default function RegisterWrapper({
+    token,
+    expired,
+}: RegisterWrapperProps) {
     const {
         register,
         handleSubmit,
@@ -20,9 +26,27 @@ export default function RegisterWrapper() {
         isSubmitSuccessful,
         onSubmit,
         onChanged,
+
         checked,
         registerResponse,
     } = useRegister()
+    if (token) {
+        return (
+            <AuthenticationContainer title={'Email Verification'}>
+                <div className={'flex flex-col gap-2'}>
+                    <p>Email: {token}</p>
+                    {expired === 'true' ? (
+                        <p>
+                            Token already expired Please send email verification
+                            again!
+                        </p>
+                    ) : (
+                        <p>Account is now enabled!</p>
+                    )}
+                </div>
+            </AuthenticationContainer>
+        )
+    }
     return (
         <>
             {isSubmitSuccessful && registerResponse ? (
@@ -54,7 +78,7 @@ export default function RegisterWrapper() {
                                     type="email"
                                     id="register-email"
                                     placeholder="username@company.com"
-                                    defaultValue="client@yopmail.com"
+                                    defaultValue={'client@yopmail.com'}
                                     required
                                     sizing={'sm'}
                                     className={
@@ -181,7 +205,6 @@ export default function RegisterWrapper() {
                                     icon={AiOutlineNumber}
                                     type="number"
                                     id="invite-code"
-                                    defaultValue={123456}
                                     placeholder=""
                                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg"
                                     autoComplete={'off'}
@@ -239,5 +262,37 @@ export default function RegisterWrapper() {
                 </AuthenticationContainer>
             )}
         </>
+    )
+}
+
+interface SuccessRegisterMessageProps {
+    head: string
+    email: string
+    footer: string
+}
+function SuccessRegisterMessage({
+    head,
+    email,
+    footer,
+}: SuccessRegisterMessageProps) {
+    return (
+        <AuthenticationContainer title={head} backLink={'/login'}>
+            <>
+                <br />
+                <p className="text-sm font-light text-black dark:text-gray-50">
+                    An email has been sent to{' '}
+                    <span className="text-sm font-normal text-cyan-600 underline dark:text-cyan-500">
+                        {email}
+                    </span>{' '}
+                    .
+                    <br />
+                    Please click on the link to activate your account.
+                </p>
+                <br />
+                <p className="text-sm font-light text-black dark:text-gray-50">
+                    {footer}
+                </p>
+            </>
+        </AuthenticationContainer>
     )
 }

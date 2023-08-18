@@ -1,38 +1,33 @@
 import { useApplicationContext } from '@/context/ApplicationProvider'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useTheme } from 'next-themes'
 
 export default function useToggleTheme() {
-    const { mode, setMode } = useApplicationContext()
-    const [checked, setChecked] = useState(mode === 'dark')
     const [label, setLabel] = useState('Light Mode')
 
-    useEffect(() => {
-        if (mode === 'dark') {
-            setChecked(true)
-            setLabel('Toggle Light Mode')
-        } else {
-            setChecked(false)
-            setLabel('Toggle Dark Mode')
-        }
-    }, [mode])
+    const [mounted, setMounted] = useState(false)
+    const { theme, setTheme, resolvedTheme } = useTheme()
+    const [checked, setChecked] = useState(false)
+    // When mounted on client, now we can show the UI
+    useEffect(() => setMounted(true), [])
 
     const toggleTheme = () => {
-        if (mode === 'dark') {
-            setMode('light')
+        if (theme === 'dark') {
+            setTheme('light')
             setChecked(false)
             setLabel('Toggle Dark Mode')
             if (typeof window !== 'undefined') {
                 window.localStorage.setItem('icovest-theme', 'light')
             }
         } else {
-            setMode('dark')
-            setChecked(true)
+            setTheme('dark')
             setLabel('Toggle Light Mode')
+            setChecked(true)
             if (typeof window !== 'undefined') {
                 window.localStorage.setItem('icovest-theme', 'dark')
             }
         }
     }
 
-    return { checked, label, toggleTheme }
+    return { theme, label, toggleTheme, resolvedTheme, mounted, checked }
 }

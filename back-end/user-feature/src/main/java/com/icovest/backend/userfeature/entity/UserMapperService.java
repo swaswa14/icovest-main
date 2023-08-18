@@ -20,7 +20,8 @@ public class UserMapperService implements Function<User, UserDto> {
                 user.getUsername(),
                 user.getEmail(),
                 authorities,
-                user.getUsdt().getBalance()
+                user.getUsdt().getBalance(),
+                user.getInviteCode()
         );
     }
 }

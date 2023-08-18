@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+
+import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -25,6 +28,11 @@ public class AuthenticationController {
 
     private final AuthenticationService authenticationService;
 
+    @Value("${app.config.CLIENT_PORT}")
+    private String CLIENT_PORT;
+
+    @Value("${app.config.HOST}")
+    private String HOST;
     @PostMapping(value = "/authenticate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<Mono<AuthenticationResponse>> authenticate(@Valid @RequestBody LoginRequest request, HttpServletResponse response)  {
@@ -41,15 +49,23 @@ public class AuthenticationController {
 
     @GetMapping("/enable")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<RegistrationResponse> enableUser(@RequestParam String token){
+    public String enableUser(@RequestParam String token, HttpServletResponse response) throws IOException {
         log.info("Enable User Request");
-        return Mono.just(authenticationService.enableUser(token));
+        AccountEnableResponse accountEnableResponse = authenticationService.enableUser(token);
+        String redirectURL = String.format("http://%s:%s/register?token=%s&expired?%s",HOST, CLIENT_PORT, accountEnableResponse.getToken(), accountEnableResponse.isExpired());
+
+
+        response.setHeader("Location", redirectURL);
+        response.setStatus(302);
+        response.sendRedirect(redirectURL);
+        return redirectURL;
     }
 
     @PostMapping("/forgot-password")
     @ResponseStatus(HttpStatus.OK)
     public Mono<ForgotPasswordResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request){
         log.info("Forgot Password Request");
+
         return Mono.just(authenticationService.forgotPassword(request));
     }
 

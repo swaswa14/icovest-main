@@ -10,8 +10,6 @@ import { UserDto } from '@/components/login/useLogin'
 import { getAuthenticatedUser } from '@/service/AuthenticationService'
 
 export interface ApplicationContextValue {
-    mode: 'dark' | 'light'
-    setMode: Dispatch<SetStateAction<'dark' | 'light'>>
     userDto: UserDto | undefined
     setUserDto: Dispatch<SetStateAction<UserDto | undefined>>
 }
@@ -37,27 +35,12 @@ export interface ApplicationContextProviderProps {
 export const ApplicationContextProvider = ({
     children,
 }: ApplicationContextProviderProps) => {
-    const [mode, setMode] = useState<'dark' | 'light'>('light')
     // @ts-ignore
     const [userDto, setUserDto] = useState<UserDto>()
     const value: ApplicationContextValue = {
-        mode,
-        setMode,
         userDto,
         setUserDto,
     }
-
-    useEffect(() => {
-        // Check if running in a browser environment
-        if (typeof window !== 'undefined') {
-            const storedMode = window.localStorage.getItem('icovest-theme') as
-                | 'dark'
-                | 'light'
-            if (storedMode) {
-                setMode(storedMode)
-            }
-        }
-    }, [])
 
     useEffect(() => {
         const fetchData = async () => {

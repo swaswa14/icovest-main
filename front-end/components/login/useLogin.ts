@@ -15,6 +15,7 @@ export type UserDto = {
     email: string
     authorities: string[]
     balance: number
+    invitationCode: string
 }
 export interface Usdt {
     CURRENCY: string // Given it's a static constant in Java, it should ideally be declared outside the interface in TypeScript
@@ -27,6 +28,7 @@ export default function useLogin() {
     type LoginSchema = z.infer<typeof loginSchema>
     const {
         register,
+        watch,
         handleSubmit,
         formState: { errors, isSubmitting, isSubmitSuccessful },
         setError,
@@ -72,6 +74,7 @@ export default function useLogin() {
         errors,
         isSubmitting,
         isSubmitSuccessful,
+        watch,
         onSubmit,
     }
 }

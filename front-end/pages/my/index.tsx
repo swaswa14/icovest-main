@@ -17,7 +17,7 @@ export default function MyPage() {
             />
             {userDto === null && <h1>Not logged in</h1>}
             {userDto !== null && (
-                <>
+                <div className={'flex flex-col gap-2'}>
                     <h1>Logged in</h1>
                     <h1>Hello {userDto?.username}</h1>
                     <h2>Authorities</h2>
@@ -26,7 +26,8 @@ export default function MyPage() {
                             <li key={index}>{authority}</li>
                         ))}
                     </ul>
-                </>
+                    <p>{userDto?.invitationCode}</p>
+                </div>
             )}
         </>
     )
