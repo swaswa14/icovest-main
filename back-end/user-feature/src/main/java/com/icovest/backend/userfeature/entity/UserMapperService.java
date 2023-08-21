@@ -21,7 +21,8 @@ public class UserMapperService implements Function<User, UserDto> {
                 user.getEmail(),
                 authorities,
                 user.getUsdt().getBalance(),
-                user.getInviteCode()
+                user.getInviteCode(),
+                user.isEnabled()
         );
     }
 }

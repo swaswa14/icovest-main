@@ -1,5 +1,4 @@
 import { UserDto } from '@/components/login/useLogin'
-import { async } from 'postcss-js'
 
 // @ts-ignore
 export const getAuthenticatedUser = async (): Promise<UserDto | null> => {
@@ -21,21 +20,14 @@ export const getAuthenticatedUser = async (): Promise<UserDto | null> => {
     }
 }
 
-export const logout = async (): Promise<string | undefined> => {
+export const logout = async (): Promise<Response | undefined> => {
     console.log('logout')
     try {
-        const response = await fetch('/api/v1/auth/logout', {
+        return await fetch('/api/v1/auth/logout', {
             method: 'GET',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
         })
-
-        if (response.ok) {
-            const data = await response.json()
-            console.log(data)
-            console.log('authenticated user , ', data)
-            return data
-        }
     } catch (error) {
         console.error('Error while logging out:', error)
     }
@@ -130,4 +122,15 @@ export const changePassword = async (request: ChangePasswordRequest) => {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(request),
     })
+}
+
+export function getCookie(name: string) {
+    let cookie = {}
+    document.cookie.split(';').forEach(function (el) {
+        let [k, v] = el.split('=')
+        // @ts-ignore
+        cookie[k.trim()] = v
+    })
+    // @ts-ignore
+    return cookie[name]
 }

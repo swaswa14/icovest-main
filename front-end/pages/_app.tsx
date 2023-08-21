@@ -1,31 +1,25 @@
 import '@/styles/globals.css'
 import type { AppProps } from 'next/app'
-import {
-    ApplicationContextProvider,
-    useApplicationContext,
-} from '@/context/ApplicationProvider'
+import { ApplicationContextProvider } from '@/context/ApplicationProvider'
 import React, { memo, ReactNode, useEffect } from 'react'
 import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
 import AuthenticatedLayout from '@/components/authenticated/AuthenticatedLayout'
-import {
-    QueryClient,
-    QueryClientProvider,
-    useQuery,
-} from '@tanstack/react-query'
-import { getAuthenticatedUser } from '@/service/AuthenticationService'
-import Cookies from 'js-cookie'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+
 const queryClient = new QueryClient()
 
 export default function App({ Component, pageProps }: AppProps) {
     return (
-        <QueryClientProvider client={queryClient}>
-            <ApplicationContextProvider>
-                <ChildComponent>
-                    <Component {...pageProps} />
-                </ChildComponent>
-            </ApplicationContextProvider>
-        </QueryClientProvider>
+        <React.StrictMode>
+            <QueryClientProvider client={queryClient}>
+                <ApplicationContextProvider>
+                    <ChildComponent>
+                        <Component {...pageProps} />
+                    </ChildComponent>
+                </ApplicationContextProvider>
+            </QueryClientProvider>
+        </React.StrictMode>
     )
 }
 
@@ -55,33 +49,10 @@ const ChildComponent = memo(({ children }: ChildComponentProps) => {
         }
     }
     const router = useRouter()
-    const { userDto, setUserDto } = useApplicationContext()
-    const jwtExists = !!Cookies.get('jwt')
 
-    const { data } = useQuery({
-        queryKey: ['fetchUserDto'],
-        queryFn: () =>
-            getAuthenticatedUser().then((res) => {
-                if (res === null) {
-                    console.log('User is not logged in')
-                }
-                return res
-            }),
-        enabled: jwtExists,
-    })
-
-    useEffect(() => {
-        if (data) {
-            setUserDto(data)
-        }
-    }, [userDto, setUserDto, data])
     const Layout = ({ children }: ChildComponentProps) => {
         if (router.pathname.includes('/my')) {
-            return (
-                <AuthenticatedLayout userDto={userDto}>
-                    {children}
-                </AuthenticatedLayout>
-            )
+            return <AuthenticatedLayout>{children}</AuthenticatedLayout>
         } else {
             return <>{children}</>
         }

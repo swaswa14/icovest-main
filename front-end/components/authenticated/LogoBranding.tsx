@@ -23,15 +23,12 @@ export default function LogoBranding() {
     const mutation = useMutation(logout, {
         onSuccess: () => {
             setUserDto(null)
-            router.push('/login')
         },
     })
 
     const handleLogout = async () => {
         try {
-            const data = mutation.mutate()
-
-            console.log(data)
+            mutation.mutate()
         } catch (error) {
             console.error('Logout failed:', error)
         }

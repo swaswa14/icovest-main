@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
+import { useApplicationContext } from '@/context/ApplicationProvider'
 
 export interface AuthenticationResponse {
     message: string
@@ -16,6 +17,7 @@ export type UserDto = {
     authorities: string[]
     balance: number
     invitationCode: string
+    enabled: boolean
 }
 export interface Usdt {
     CURRENCY: string // Given it's a static constant in Java, it should ideally be declared outside the interface in TypeScript
@@ -35,15 +37,9 @@ export default function useLogin() {
     } = useForm<LoginSchema>({
         resolver: zodResolver(loginSchema),
     })
+    const { setUserDto } = useApplicationContext()
 
     const onSubmit: SubmitHandler<LoginSchema> = async (schema) => {
-        // eslint-disable-next-line no-async-promise-executor
-        await new Promise(async (resolve) => {
-            setTimeout(() => {
-                resolve(schema)
-            }, 3000)
-        })
-
         try {
             const response = await fetch('/api/v1/auth/authenticate', {
                 method: 'POST',
@@ -56,9 +52,11 @@ export default function useLogin() {
 
             // Assuming you'd want to check the response, for example:
             if (response.ok) {
-                const data = await response.json()
-                console.log(data.message)
-                router.push('/my')
+                const data: UserDto = await response.json()
+                // console.log(data.message)
+                console.log('authenticated user , ', data)
+                setUserDto(data)
+                router.reload()
             } else {
                 setError('pass', { message: ' ' })
                 setError('user', { message: ' ' })

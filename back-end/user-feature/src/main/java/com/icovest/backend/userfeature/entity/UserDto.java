@@ -12,6 +12,7 @@ public record UserDto(
         String email,
         List<String> authorities,
         BigDecimal balance,
-        String invitationCode
+        String invitationCode,
+        boolean enabled
 ) {
 }

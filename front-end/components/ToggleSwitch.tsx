@@ -45,7 +45,7 @@ export default function ToggleSwitch({
                 onClick={onToggle}
                 defaultChecked={checked}
             />
-            <div className={`${divClass}`}></div>
+            <div className={divClass}></div>
             <span className={`${spanClass}`}>{label}</span>
         </label>
     )

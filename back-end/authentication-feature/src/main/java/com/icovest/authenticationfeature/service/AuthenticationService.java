@@ -61,7 +61,7 @@ public class AuthenticationService {
             throw new DuplicateEmailException();
         } else if (userRepository.existsUserByUsername(username)) {
             throw new DuplicateUsernameException();
-        } else if (!userRepository.existsUserByInviteCode(invitationCode) && invitationCode.length() == 6) {
+        } else if (invitationCode!= null && !userRepository.existsUserByInviteCode(invitationCode) && invitationCode.length() == 6) {
             throw new InviteCodeDoesNotExistsException();
         }
 
@@ -108,7 +108,7 @@ public class AuthenticationService {
 
     }
 
-    public AuthenticationResponse authenticate(LoginRequest request, HttpServletResponse response) {
+    public UserDto authenticate(LoginRequest request, HttpServletResponse response) {
         log.info("Authenticating user: {}", request);
 
         final String usernameOrEmail = request.getUser().toLowerCase();
@@ -136,14 +136,11 @@ public class AuthenticationService {
 
             log.info("Authenticated user {}", user);
 
-            return AuthenticationResponse.builder()
-                    .message("You have been authenticated successfully")
-                    .userDto(userMapperService.apply(user))
-                    .build();
-        }catch (DisabledException e){
-            throw new AccountNotEnabledException();
-        }catch (BadCredentialsException ex){
+            return userMapperService.apply(user);
+        } catch (BadCredentialsException ex){
             throw new InvalidCredentialsException();
+        } catch (Exception e3){
+            return null;
         }
 
     }

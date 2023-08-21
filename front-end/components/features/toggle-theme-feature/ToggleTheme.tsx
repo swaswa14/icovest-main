@@ -8,11 +8,7 @@ export default function ToggleTheme() {
     const { theme, toggleTheme, label, mounted, checked } = useToggleTheme()
 
     return (
-        <Tooltip
-            content={label}
-            placement={'top'}
-            style={theme === 'dark' ? 'dark' : 'light'}
-        >
+        <Tooltip content={label} placement={'top'} style={'auto'}>
             <div>
                 <ToggleSwitch
                     onToggle={toggleTheme}

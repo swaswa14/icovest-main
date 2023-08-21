@@ -5,17 +5,21 @@ import PageRedirect from '@/components/PageRedirect'
 
 export default function LoginPage() {
     const { userDto } = useApplicationContext()
-    if (userDto) {
-        return <PageRedirect link={'/my'} delay={1000} />
-    }
+
     return (
         <>
-            <PageSeo
-                title={'Log in page'}
-                description={'Page for authentication'}
-                keywords={['login', 'authentication']}
-            />
-            <LoginWrapper />
+            {userDto ? (
+                <PageRedirect link={'/my'} delay={1000} />
+            ) : (
+                <>
+                    <PageSeo
+                        title={'Log in page'}
+                        description={'Page for authentication'}
+                        keywords={['login', 'authentication']}
+                    />
+                    <LoginWrapper />
+                </>
+            )}
         </>
     )
 }

@@ -4,7 +4,6 @@ import FieldErrorMessage from '@/components/FieldErrorMessage'
 import React, { useEffect, useState } from 'react'
 import FormButton from '@/components/FormButton'
 import useChangePassword from '@/components/login/useChangePassword'
-import AuthenticationContainer from '@/components/login/AuthenticationContainer'
 import { CommonApiResponse } from '@/service/AuthenticationService'
 
 export interface ChangePasswordFormProps {

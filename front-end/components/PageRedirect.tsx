@@ -26,7 +26,7 @@ export default function PageRedirect({
             // @ts-ignore
             clearTimeout(redirectAfterDelay)
         }
-    }, [link, router])
+    }, [delay, link, router])
 
     return (
         <div className={'h-screen'}>

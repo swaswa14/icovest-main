@@ -9,6 +9,7 @@ import useLogin from '@/components/login/useLogin'
 import FormButton from '@/components/FormButton'
 import { TextInput } from 'flowbite-react'
 import PageLoad from '@/components/PageRedirect'
+import FieldErrorMessage from '@/components/FieldErrorMessage'
 
 export default function LoginWrapper() {
     const {
@@ -26,23 +27,25 @@ export default function LoginWrapper() {
             ) : (
                 <AuthenticationContainer title={'Sign in to your account'}>
                     <form
-                        className="space-y-4 md:space-y-6"
+                        className="space-y-2 md:space-y-2"
                         onSubmit={handleSubmit(onSubmit)}
+                        autoComplete={'off'}
                     >
                         <div>
                             <label
-                                htmlFor="email"
-                                className="text-sm font-medium text-gray-500 dark:text-white hidden"
+                                htmlFor="login-user"
+                                className="text-sm font-medium text-gray-500 dark:text-white"
                             >
-                                username/email
+                                Email/Username
                             </label>
                             <TextInput
                                 icon={MdEmail}
                                 type="text"
-                                id="email"
+                                id="login-user"
+                                autoComplete={'login-user'}
                                 sizing={'sm'}
                                 required
-                                placeholder="username/email"
+                                placeholder={'company@mail.com / username'}
                                 className={
                                     'bg-gray-50 border border-gray-300 text-gray-900 rounded-lg '
                                 }
@@ -58,38 +61,18 @@ export default function LoginWrapper() {
                                 </p>
                             )}
                         </div>
-                        {/*<FormField*/}
-                        {/*    id={'user'}*/}
-                        {/*    type={'email'}*/}
-                        {/*    placeholder={'name@email.com'}*/}
-                        {/*    isDisabled={isSubmitting}*/}
-                        {/*    label={'Email Address'}*/}
-                        {/*    errorMessage={errors.user?.message}*/}
-                        {/*    icon={MdEmail}*/}
-                        {/*    {...register('user')}*/}
-                        {/*/>*/}
-                        {/*<FormField*/}
-                        {/*    id={'pass'}*/}
-                        {/*    placeholder={'••••••••'}*/}
-                        {/*    isDisabled={isSubmitting}*/}
-                        {/*    label={'Password'}*/}
-                        {/*    errorMessage={errors.pass?.message}*/}
-                        {/*    icon={RiLockPasswordFill}*/}
-                        {/*    {...register('pass')}*/}
-                        {/*    type={'password'}*/}
-                        {/*/>*/}
-
                         <div>
                             <label
-                                htmlFor="pass"
-                                className="text-sm font-medium text-gray-500 dark:text-white hidden"
+                                htmlFor="login-password"
+                                className="text-sm font-medium text-gray-500 dark:text-white"
                             >
-                                password
+                                Password
                             </label>
                             <TextInput
                                 icon={RiLockPasswordFill}
                                 type="password"
-                                id="pass"
+                                id="login-password"
+                                autoComplete={'login-password'}
                                 sizing={'sm'}
                                 placeholder="password"
                                 required
@@ -140,9 +123,9 @@ export default function LoginWrapper() {
                             label={'Log in'}
                         />
                         {errors.pass?.message?.trim() === '' && errors && (
-                            <p className={'text-red-600 text-center w-full'}>
+                            <FieldErrorMessage>
                                 {'Invalid Credentials'}
-                            </p>
+                            </FieldErrorMessage>
                         )}
                         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                             Don’t have an account yet?{' '}

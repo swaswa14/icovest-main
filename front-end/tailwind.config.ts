@@ -24,11 +24,7 @@ const config: Config = {
             },
         },
     },
-    plugins: [
-        require('flowbite/plugin'),
-        require('autoprefixer'),
-        require('tailwindcss'),
-    ],
+    plugins: [require('flowbite/plugin'), require('autoprefixer')],
 }
 
 export default config

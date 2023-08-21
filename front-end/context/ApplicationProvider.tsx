@@ -8,7 +8,6 @@ import React, {
 } from 'react'
 import { UserDto } from '@/components/login/useLogin'
 import { getAuthenticatedUser } from '@/service/AuthenticationService'
-import Cookies from 'js-cookie'
 
 export interface ApplicationContextValue {
     userDto: UserDto | null
@@ -45,17 +44,18 @@ export const ApplicationContextProvider = ({
 
     useEffect(() => {
         const fetchData = async () => {
-            //Check if the jwt cookie exists
-            const jwtCookie = Cookies.get('jwt')
-            if (!jwtCookie) {
+            try {
+                setUserDto(await getAuthenticatedUser())
+            } catch (error) {
+                console.error('Error at ApplicationProvider: ', error)
                 return null
-            } else {
-                return await getAuthenticatedUser()
             }
         }
-        fetchData().then((user) => {
-            setUserDto(user)
-        })
+        fetchData()
+        // const data = fetchData().then((user) => {
+        //     console.log('Here at ApplicationProvider user: ', user)
+        //     return user
+        // })
     }, [])
 
     return (

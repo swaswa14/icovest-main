@@ -36,16 +36,16 @@ public class AuthenticationController {
     private String HOST;
     @PostMapping(value = "/authenticate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Mono<AuthenticationResponse>> authenticate(@Valid @RequestBody LoginRequest request, HttpServletResponse response)  {
+    public Mono<UserDto> authenticate(@Valid @RequestBody LoginRequest request, HttpServletResponse response)  {
         log.info("Login Request {}", request);
-        return ResponseEntity.ok(Mono.just(authenticationService.authenticate(request, response)));
+        return Mono.just(authenticationService.authenticate(request, response));
     }
 
     @PostMapping("/register")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Mono<RegistrationResponse>> register(@Valid @RequestBody RegistrationRequest request){
+    public ResponseEntity<RegistrationResponse> register(@Valid @RequestBody RegistrationRequest request){
         log.info("Register Request {}", request);
-        return ResponseEntity.ok(Mono.just(authenticationService.register(request)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(authenticationService.register(request));
     }
 
     @GetMapping("/enable")
@@ -101,14 +101,20 @@ public class AuthenticationController {
 
     @GetMapping("/logout")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<String> logout(HttpServletResponse response) {
+    public String logout(HttpServletResponse response) throws IOException {
         log.info("Logout Request");
         Cookie cookie = new Cookie("jwt", null); // Make sure to replace "cookieName" with the name of your actual
         // cookie
         cookie.setMaxAge(0);
         cookie.setPath("/"); // This is important to make sure the cookie gets deleted for all paths
         response.addCookie(cookie);
-        return ResponseEntity.status(HttpStatus.OK).body("User logged out and cookie deleted");
+        String redirectURL = String.format("http://%s:%s/login", HOST, CLIENT_PORT);
+        response.setHeader("Location", redirectURL);
+        response.setStatus(302);
+        response.sendRedirect(redirectURL);
+
+        return redirectURL;
+
     }
 
     @GetMapping(value = "/send-verification-email")
