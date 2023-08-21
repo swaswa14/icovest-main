@@ -55,7 +55,6 @@ public class AuthenticationController {
         AccountEnableResponse accountEnableResponse = authenticationService.enableUser(token);
         String redirectURL = String.format("http://%s:%s/register?token=%s&expired?%s",HOST, CLIENT_PORT, accountEnableResponse.getToken(), accountEnableResponse.isExpired());
 
-
         response.setHeader("Location", redirectURL);
         response.setStatus(302);
         response.sendRedirect(redirectURL);
