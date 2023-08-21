@@ -35,6 +35,11 @@ export interface ChildComponentProps {
 
 // eslint-disable-next-line react/display-name
 const ChildComponent = memo(({ children }: ChildComponentProps) => {
+    const [currentTheme, setCurrentTheme] = React.useState<'dark' | 'light'>()
+
+    useEffect(() => {
+        setCurrentTheme(defaultTheme())
+    }, [])
     const defaultTheme = () => {
         if (typeof window !== 'undefined') {
             const storedMode = window.localStorage.getItem('icovest-theme') as
@@ -56,7 +61,7 @@ const ChildComponent = memo(({ children }: ChildComponentProps) => {
         queryKey: ['fetchUserDto'],
         queryFn: () =>
             getAuthenticatedUser().then((res) => {
-                if (res === undefined) {
+                if (res === null) {
                     console.log('User is not logged in')
                 }
                 return res
@@ -81,7 +86,7 @@ const ChildComponent = memo(({ children }: ChildComponentProps) => {
     }
 
     return (
-        <ThemeProvider attribute={'class'} defaultTheme={defaultTheme()}>
+        <ThemeProvider attribute={'class'} defaultTheme={currentTheme}>
             <Layout>{children}</Layout>
         </ThemeProvider>
     )

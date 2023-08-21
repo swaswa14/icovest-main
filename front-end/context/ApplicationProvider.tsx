@@ -10,8 +10,8 @@ import { UserDto } from '@/components/login/useLogin'
 import { getAuthenticatedUser } from '@/service/AuthenticationService'
 
 export interface ApplicationContextValue {
-    userDto: UserDto | undefined
-    setUserDto: Dispatch<SetStateAction<UserDto | undefined>>
+    userDto: UserDto | null
+    setUserDto: Dispatch<SetStateAction<UserDto | null>>
 }
 
 export const ApplicationContext = createContext<ApplicationContextValue | null>(
@@ -36,7 +36,7 @@ export const ApplicationContextProvider = ({
     children,
 }: ApplicationContextProviderProps) => {
     // @ts-ignore
-    const [userDto, setUserDto] = useState<UserDto>()
+    const [userDto, setUserDto] = useState<UserDto | null>(null)
     const value: ApplicationContextValue = {
         userDto,
         setUserDto,
@@ -48,16 +48,9 @@ export const ApplicationContextProvider = ({
 
             return user
         }
-        fetchData()
-            .then((user) => {
-                setUserDto(user)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
-            .finally(() => {
-                console.log('User fetched')
-            })
+        fetchData().then((user) => {
+            setUserDto(user)
+        })
     }, [])
 
     return (

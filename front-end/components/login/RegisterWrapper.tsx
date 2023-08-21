@@ -1,5 +1,5 @@
 import AuthenticationContainer from '@/components/login/AuthenticationContainer'
-import { Checkbox, Label, TextInput } from 'flowbite-react'
+import { Button, Checkbox, Label, TextInput } from 'flowbite-react'
 import { MdEmail } from 'react-icons/md'
 import { BsFillFilePersonFill } from 'react-icons/bs'
 import { RiLockPasswordLine } from 'react-icons/ri'
@@ -8,15 +8,24 @@ import { AiOutlineNumber } from 'react-icons/ai'
 import useRegister from '@/components/login/useRegister'
 import FormButton from '@/components/FormButton'
 import FieldErrorMessage from '@/components/FieldErrorMessage'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import PageRedirect from '@/components/PageRedirect'
+import {
+    resendEmailVerification,
+    ResendEmailVerificationRequestProps,
+} from '@/service/AuthenticationService'
+import LoadingIcons from 'react-loading-icons'
+import { useMutation } from '@tanstack/react-query'
 
 export interface RegisterWrapperProps {
     token?: string | string[] | undefined
     expired?: string | string[] | undefined
+    inviteCode?: string | string[] | undefined
 }
 export default function RegisterWrapper({
     token,
     expired,
+    inviteCode,
 }: RegisterWrapperProps) {
     const {
         register,
@@ -30,21 +39,39 @@ export default function RegisterWrapper({
         checked,
         registerResponse,
     } = useRegister()
+    const [redirectToLogin, setRedirectToLogin] = useState(false)
+    useEffect(() => {
+        if (expired !== 'true') {
+            // This will set the `redirectToLogin` state to true after 5 seconds
+            const timer = setTimeout(() => {
+                setRedirectToLogin(true)
+            }, 5_000)
+
+            // Cleanup function to clear the timeout if the component unmounts
+            return () => clearTimeout(timer)
+        }
+    }, [expired])
+
     if (token) {
         return (
-            <AuthenticationContainer title={'Email Verification'}>
-                <div className={'flex flex-col gap-2'}>
-                    <p>Email: {token}</p>
-                    {expired === 'true' ? (
-                        <p>
-                            Token already expired Please send email verification
-                            again!
-                        </p>
-                    ) : (
-                        <p>Account is now enabled!</p>
-                    )}
-                </div>
-            </AuthenticationContainer>
+            <>
+                {redirectToLogin ? (
+                    <PageRedirect link={'/login'} />
+                ) : (
+                    <AuthenticationContainer title={'Email Verification'}>
+                        <div className={'flex flex-col gap-2'}>
+                            {expired === 'true' ? (
+                                <p>
+                                    Token already expired Please send email
+                                    verification again!
+                                </p>
+                            ) : (
+                                <p>Account is now enabled!</p>
+                            )}
+                        </div>
+                    </AuthenticationContainer>
+                )}
+            </>
         )
     }
     return (
@@ -78,7 +105,7 @@ export default function RegisterWrapper({
                                     type="email"
                                     id="register-email"
                                     placeholder="username@company.com"
-                                    defaultValue={'client@yopmail.com'}
+                                    autoComplete={'new-email'}
                                     required
                                     sizing={'sm'}
                                     className={
@@ -110,7 +137,6 @@ export default function RegisterWrapper({
                                     type="text"
                                     id="icovest-username"
                                     placeholder="john.doe"
-                                    defaultValue="client"
                                     sizing={'sm'}
                                     required
                                     autoComplete={'new-username'}
@@ -143,7 +169,6 @@ export default function RegisterWrapper({
                                     autoComplete={'new-password'}
                                     icon={RiLockPasswordLine}
                                     type="password"
-                                    defaultValue="Password123"
                                     id="icovest-password"
                                     placeholder="Enter your password"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg"
@@ -174,11 +199,10 @@ export default function RegisterWrapper({
                                     icon={RiLockPasswordLine}
                                     type="password"
                                     id="verify-password"
-                                    defaultValue="Password123"
                                     placeholder="Confirm your password"
                                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg"
                                     required
-                                    autoComplete={'new-password'}
+                                    autoComplete={'verify-password'}
                                     color={
                                         errors.verifyPassword?.message
                                             ? 'failure'
@@ -207,7 +231,8 @@ export default function RegisterWrapper({
                                     id="invite-code"
                                     placeholder=""
                                     className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg"
-                                    autoComplete={'off'}
+                                    defaultValue={inviteCode}
+                                    autoComplete={'invite-code'}
                                     style={{ appearance: 'textfield' }}
                                     color={
                                         errors.invitationCode?.message
@@ -215,7 +240,10 @@ export default function RegisterWrapper({
                                             : 'gray'
                                     }
                                     {...register('invitationCode')}
-                                    disabled={isSubmitting}
+                                    disabled={
+                                        isSubmitting ||
+                                        typeof inviteCode !== 'undefined'
+                                    }
                                 />
                                 {errors.invitationCode?.message && (
                                     <FieldErrorMessage>
@@ -232,6 +260,7 @@ export default function RegisterWrapper({
                                         onClick={() => {
                                             onChanged()
                                         }}
+                                        checked={checked}
                                         id="accept"
                                     />
                                     <Label className="flex" htmlFor="accept">
@@ -244,7 +273,9 @@ export default function RegisterWrapper({
                                         </p>
                                         <Link
                                             className="text-cyan-600 hover:underline dark:text-cyan-500"
-                                            href="#"
+                                            href="/terms-and-conditions"
+                                            target={'_blank'}
+                                            rel={'noopener noreferrer'}
                                         >
                                             <p>&nbsp;terms and conditions</p>
                                         </Link>
@@ -257,6 +288,23 @@ export default function RegisterWrapper({
                                 isSubmitting={isSubmitting}
                                 isDisabled={!checked}
                             />
+                            {(errors.email?.message ||
+                                errors.username?.message) && (
+                                <div
+                                    className={
+                                        'flex flex-row text-center text-xl items-center text-red-600'
+                                    }
+                                >
+                                    <p>Click&nbsp;</p>
+                                    <Link
+                                        className="text-cyan-600 hover:underline dark:text-cyan-500"
+                                        href="/forgot"
+                                    >
+                                        <p>here </p>
+                                    </Link>
+                                    <p>&nbsp;to reset your password</p>
+                                </div>
+                            )}
                         </>
                     </form>
                 </AuthenticationContainer>
@@ -287,6 +335,10 @@ function SuccessRegisterMessage({
                     .
                     <br />
                     Please click on the link to activate your account.
+                    <br />
+                    Didn&apos;t receive the email?
+                    <br />
+                    <ResendEmailVerificationButton email={email} />
                 </p>
                 <br />
                 <p className="text-sm font-light text-black dark:text-gray-50">
@@ -294,5 +346,54 @@ function SuccessRegisterMessage({
                 </p>
             </>
         </AuthenticationContainer>
+    )
+}
+
+export const ResendEmailVerificationButton = ({
+    email,
+}: ResendEmailVerificationRequestProps) => {
+    const [success, setSuccess] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const request: ResendEmailVerificationRequestProps = { email: email }
+    // Use the useMutation hook to handle the resend operation
+    const mutation = useMutation(resendEmailVerification, {
+        onSuccess: (data) => {
+            setLoading(false)
+            setSuccess(true)
+            console.log('result', data)
+        },
+        onMutate: () => {
+            setLoading(true)
+        },
+    })
+
+    return (
+        <>
+            {success ? (
+                <p className="text-sm font-light text-black dark:text-gray-50">
+                    Email has been sent!
+                </p>
+            ) : (
+                <Button
+                    className="w-full"
+                    type={'submit'}
+                    onClick={() => {
+                        setLoading(true)
+                        setTimeout(() => {
+                            mutation.mutate(request)
+                        }, 2000)
+                    }} // Trigger the mutation when button is clicked
+                    disabled={loading}
+                >
+                    {loading ? (
+                        <LoadingIcons.SpinningCircles
+                            style={{ width: '1.5rem', height: '1.5rem' }}
+                        />
+                    ) : (
+                        'Resend Email Verification'
+                    )}
+                </Button>
+            )}
+        </>
     )
 }

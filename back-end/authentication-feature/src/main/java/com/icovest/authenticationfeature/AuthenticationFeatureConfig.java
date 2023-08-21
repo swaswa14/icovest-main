@@ -1,11 +1,12 @@
 package com.icovest.authenticationfeature;
 
-import com.icovest.baseclass.BaseClassConfig;
-import com.icovest.baseclass.errors.AccountDoesNotExistsException;
+
 import com.icovest.backend.userfeature.UserFeatureConfig;
 import com.icovest.backend.userfeature.entity.User;
 import com.icovest.backend.userfeature.entity.UserRepository;
 import com.icovest.backend.userfeature.entity.UserService;
+import com.icovest.baseclass.BaseClassConfig;
+import com.icovest.baseclass.errors.AccountDoesNotExistsException;
 import com.icovest.emailfeature.EmailFeatureConfiguration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.SpringBootConfiguration;

@@ -14,7 +14,7 @@
     <artifactId>icovest-application</artifactId>
     <version>1.0.0</version>
     <packaging>pom</packaging>
-    <username>Icovest Application</username>
+    <name>Icovest Application</name>
 
     <modules>
         <module>back-end</module>

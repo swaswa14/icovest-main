@@ -1,5 +1,6 @@
 package com.icovest.authenticationfeature.service;
 
+import com.icovest.baseclass.enums.ApiResponseStatus;
 import com.icovest.baseclass.enums.Roles;
 import com.icovest.backend.userfeature.entity.*;
 import com.icovest.backend.userfeature.entity.token.TokenService;
@@ -23,6 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -227,5 +229,20 @@ public class AuthenticationService {
         }
 
         return null;
+    }
+
+    public CommonApiResponse resendVerificationEmail(String email) {
+        User user = userService.findUserByUsernameOrEmail(email);
+        try {
+            String jwtToken = jwtService.generateToken(user);
+
+            emailFeatureService.sendEmailEnableAccount(jwtToken, user.getEmail(), new Date());
+            return CommonApiResponse.builder()
+                    .status(ApiResponseStatus.SUCCESS)
+                    .message("Verification Email Sent")
+                    .build();
+        } catch (MessagingException e) {
+            throw new EmailErrorException(user.getEmail());
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.icovest.backend.application.controller;
 
+import com.fasterxml.jackson.core.util.RequestPayload;
 import com.icovest.authenticationfeature.service.AuthenticationService;
 import com.icovest.backend.userfeature.entity.UserDto;
 import com.icovest.backend.userfeature.requests.*;
@@ -96,5 +97,12 @@ public class AuthenticationController {
         cookie.setPath("/"); // This is important to make sure the cookie gets deleted for all paths
         response.addCookie(cookie);
         return ResponseEntity.status(HttpStatus.OK).body("User logged out and cookie deleted");
+    }
+
+    @GetMapping(value = "/send-verification-email")
+    @ResponseStatus(HttpStatus.OK)
+    public ResponseEntity<Mono<CommonApiResponse>> resendVerificationEmail(@RequestParam String email) {
+        // Your logic here
+        return ResponseEntity.ok(Mono.just(authenticationService.resendVerificationEmail(email)));
     }
 }

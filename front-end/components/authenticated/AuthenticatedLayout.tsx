@@ -7,7 +7,7 @@ import { UserDto } from '@/components/login/useLogin'
 
 export interface AuthenticatedLayoutProps {
     children: ReactNode
-    userDto: UserDto | undefined
+    userDto: UserDto | null
 }
 
 export default function AuthenticatedLayout({

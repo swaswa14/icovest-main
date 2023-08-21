@@ -13,7 +13,7 @@
 
     <artifactId>user-feature</artifactId>
     <version>1.0.0</version>
-    <username>user-feature-module</username>
+    <name>user-feature-module</name>
     <description>This module is everything about the user Features</description>
     <dependencies>
 

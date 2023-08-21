@@ -14,7 +14,7 @@
 
     <artifactId>email-feature</artifactId>
     <version>1.0.0</version>
-    <username>email-feature-module</username>
+    <name>email-feature-module</name>
 
 
     <build>

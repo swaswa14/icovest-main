@@ -23,7 +23,7 @@ public class SecurityConfig {
 
 
     private final String[] publicEndPoint = {"/api/v1/auth/logout", "/api/v1/auth/authenticate", "/api/v1/auth/register", "/api/v1/auth/forgot-password",
-    "/api/v1/auth/change-password", "/api/v1/auth/enable"
+    "/api/v1/auth/change-password", "/api/v1/auth/enable", "/api/v1/auth/send-verification-email"
     };
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

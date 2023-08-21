@@ -14,7 +14,7 @@
 
     <artifactId>application</artifactId>
     <version>1.0.0</version>
-    <username>application-module</username>
+    <name>application-module</name>
     <description>This module will be used to run the jar application here we will compile all</description>
     <dependencies>
         <dependency>

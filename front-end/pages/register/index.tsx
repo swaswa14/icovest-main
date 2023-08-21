@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 
 export default function RegisterPage() {
     const router = useRouter()
-    const { token, expired } = router.query
+    const { token, expired, inviteCode } = router.query
     return (
         <>
             <PageSeo
@@ -12,7 +12,11 @@ export default function RegisterPage() {
                 description={'Create an Account'}
                 keywords={['register', 'create account']}
             />
-            <RegisterWrapper token={token} expired={expired} />
+            <RegisterWrapper
+                token={token}
+                expired={expired}
+                inviteCode={inviteCode}
+            />
         </>
     )
 }

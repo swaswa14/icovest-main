@@ -15,7 +15,7 @@
     <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <username>base-class module</username>
+    <name>base-class module</name>
 
 
     <build>

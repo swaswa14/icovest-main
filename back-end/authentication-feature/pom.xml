@@ -14,7 +14,7 @@
     <artifactId>authentication-feature</artifactId>
     <version>1.0.0</version>
     <packaging>jar</packaging>
-    <username>authentication feature module</username>
+    <name>authentication feature module</name>
     <dependencies>
         <dependency>
             <groupId>com.icovest</groupId>

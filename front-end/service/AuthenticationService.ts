@@ -1,6 +1,7 @@
 import { UserDto } from '@/components/login/useLogin'
 
-export const getAuthenticatedUser = async (): Promise<UserDto | undefined> => {
+// @ts-ignore
+export const getAuthenticatedUser = async (): Promise<UserDto | null> => {
     console.log('getAuthenticatedUser')
     try {
         const response = await fetch('/api/v1/auth/authenticated', {
@@ -12,7 +13,7 @@ export const getAuthenticatedUser = async (): Promise<UserDto | undefined> => {
         if (response.ok) {
             return await response.json()
         } else {
-            console.log('Failed to login:', response.statusText)
+            return null
         }
     } catch (error) {
         console.log('Error while logging in:', error)
@@ -37,6 +38,11 @@ export const logout = async (): Promise<string | undefined> => {
     } catch (error) {
         console.error('Error while logging out:', error)
     }
+}
+
+export interface CommonApiResponse {
+    status: 'SUCCESS' | 'ERROR' | 'FAILURE'
+    message: string
 }
 
 export interface RegistrationRequest {
@@ -76,4 +82,22 @@ export const registerUser = async (
         body: JSON.stringify(request),
     })
     return response
+}
+
+export interface ResendEmailVerificationRequestProps {
+    email: string
+}
+export const resendEmailVerification = async (
+    request: ResendEmailVerificationRequestProps
+): Promise<CommonApiResponse> => {
+    console.log('resendEmailVerification request ', request)
+    const response = await fetch(
+        `/api/v1/auth/send-verification-email?email=${request.email}`,
+        {
+            method: 'GET',
+            credentials: 'include',
+            headers: { 'Content-Type': 'application/json' },
+        }
+    )
+    return response.json()
 }
