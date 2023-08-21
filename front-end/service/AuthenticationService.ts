@@ -1,4 +1,5 @@
 import { UserDto } from '@/components/login/useLogin'
+import { async } from 'postcss-js'
 
 // @ts-ignore
 export const getAuthenticatedUser = async (): Promise<UserDto | null> => {
@@ -100,4 +101,33 @@ export const resendEmailVerification = async (
         }
     )
     return response.json()
+}
+
+export interface ForgotPasswordRequest {
+    email: string
+}
+export const forgotPassword = async (
+    request: ForgotPasswordRequest
+): Promise<Response> => {
+    console.log('forgotPassword request ', request)
+    return await fetch(`/api/v1/auth/forgot-password?email=${request.email}`, {
+        method: 'GET',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+    })
+}
+
+export interface ChangePasswordRequest {
+    token: string | string[] | undefined
+    password: string
+}
+
+export const changePassword = async (request: ChangePasswordRequest) => {
+    console.log('changePassword request ', request)
+    return await fetch('/api/v1/auth/change-password', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(request),
+    })
 }

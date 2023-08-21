@@ -8,6 +8,7 @@ import React, {
 } from 'react'
 import { UserDto } from '@/components/login/useLogin'
 import { getAuthenticatedUser } from '@/service/AuthenticationService'
+import Cookies from 'js-cookie'
 
 export interface ApplicationContextValue {
     userDto: UserDto | null
@@ -44,9 +45,13 @@ export const ApplicationContextProvider = ({
 
     useEffect(() => {
         const fetchData = async () => {
-            const user = await getAuthenticatedUser()
-
-            return user
+            //Check if the jwt cookie exists
+            const jwtCookie = Cookies.get('jwt')
+            if (!jwtCookie) {
+                return null
+            } else {
+                return await getAuthenticatedUser()
+            }
         }
         fetchData().then((user) => {
             setUserDto(user)

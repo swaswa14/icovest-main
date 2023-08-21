@@ -14,7 +14,7 @@ import {
     useQuery,
 } from '@tanstack/react-query'
 import { getAuthenticatedUser } from '@/service/AuthenticationService'
-
+import Cookies from 'js-cookie'
 const queryClient = new QueryClient()
 
 export default function App({ Component, pageProps }: AppProps) {
@@ -56,6 +56,7 @@ const ChildComponent = memo(({ children }: ChildComponentProps) => {
     }
     const router = useRouter()
     const { userDto, setUserDto } = useApplicationContext()
+    const jwtExists = !!Cookies.get('jwt')
 
     const { data } = useQuery({
         queryKey: ['fetchUserDto'],
@@ -66,6 +67,7 @@ const ChildComponent = memo(({ children }: ChildComponentProps) => {
                 }
                 return res
             }),
+        enabled: jwtExists,
     })
 
     useEffect(() => {

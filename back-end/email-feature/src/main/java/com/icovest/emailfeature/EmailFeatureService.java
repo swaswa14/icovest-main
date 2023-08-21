@@ -61,12 +61,17 @@ public class EmailFeatureService {
         mailSender.send(message);
     }
 
-    public void sendCodeToForgotPassword(String email, String code) throws MessagingException {
+    public void sendCodeToForgotPassword(String email, String token) throws MessagingException {
+        final String link = String.format("http://%s:%s/api/v1/auth/reset?token=%s",
+                HOST,
+                SERVER_PORT,
+                token
+        );
 
         final String html = "forgot_password_code";
 
         Context context = new Context();
-        context.setVariable("code", code);
+        context.setVariable("link", link);
 
         sendEmail(email, "Forgot Password", context, html);
 

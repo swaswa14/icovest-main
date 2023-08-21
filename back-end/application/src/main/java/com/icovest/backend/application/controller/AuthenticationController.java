@@ -62,17 +62,29 @@ public class AuthenticationController {
         return redirectURL;
     }
 
-    @PostMapping("/forgot-password")
+    @GetMapping("/reset")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<ForgotPasswordResponse> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request){
-        log.info("Forgot Password Request");
+    public String resetPassword(@RequestParam String token, HttpServletResponse response) throws IOException {
+        log.info("Reset Password Request");
+        String redirectURL = String.format("http://%s:%s/forgot?token=%s", HOST, CLIENT_PORT, token);
 
-        return Mono.just(authenticationService.forgotPassword(request));
+        response.setHeader("Location", redirectURL);
+        response.setStatus(302);
+        response.sendRedirect(redirectURL);
+        return redirectURL;
+    }
+
+    @GetMapping("/forgot-password")
+    @ResponseStatus(HttpStatus.OK)
+    public Mono<CommonApiResponse> forgotPassword(@RequestParam String email){
+        log.info("Forgot Password Request {}", email);
+
+        return Mono.just(authenticationService.forgotPassword(email));
     }
 
     @PostMapping("/change-password")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<ChangePasswordResponse> changePassword(@Valid @RequestBody ChangePasswordRequest request){
+    public Mono<CommonApiResponse> changePassword(@Valid @RequestBody ChangePasswordRequest request){
         log.info("Change Password Request");
         return Mono.just(authenticationService.changePassword(request));
     }

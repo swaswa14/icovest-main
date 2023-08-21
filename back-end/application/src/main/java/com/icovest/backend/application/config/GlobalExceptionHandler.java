@@ -30,7 +30,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(AccountDoesNotExistsException.class)
     public ResponseEntity<ApiError> handleAccountDoesNotExistsException(AccountDoesNotExistsException ex){
-        return new ResponseEntity<>(service.apiErrorBuilder(ex, HttpStatus.NOT_FOUND), HttpStatus.NOT_FOUND);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body((service.apiErrorBuilder(ex, HttpStatus.NOT_FOUND)));
 
     }
 

@@ -24,7 +24,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import reactor.core.publisher.Mono;
+
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -167,35 +167,32 @@ public class AuthenticationService {
 
     }
 
-    public ForgotPasswordResponse forgotPassword(ForgotPasswordRequest request) {
-        UserDto userDto = userService.findByUsernameOrEmail(request.getEmail());
-        User user = userRepository.findById(userDto.id()).orElseThrow(AccountDoesNotExistsException::new);
+    public CommonApiResponse forgotPassword(String email) {
+        log.info("Forgot Password Request {}", email);
         try {
-            emailFeatureService.sendCodeToForgotPassword(user.getEmail(), request.getCode());
+            User user = userService.findUserByUsernameOrEmail(email);
+            String token = jwtService.generateToken(user);
+            emailFeatureService.sendCodeToForgotPassword(user.getEmail(), token);
 
-            return ForgotPasswordResponse.builder()
-                    .isEmailValid(true)
-                    .response("Please enter the code sent to your email")
+            return CommonApiResponse.builder()
+                    .status(ApiResponseStatus.SUCCESS)
+                    .message("An email has been sent to your email address to reset your password")
                     .build();
         } catch (MessagingException e) {
-            throw new EmailErrorException(user.getEmail());
+            throw new EmailErrorException(email);
         }
     }
 
-    public ChangePasswordResponse changePassword (ChangePasswordRequest request){
-        UserDto userDto = userService.findByUsernameOrEmail(request.getEmail());
-        User user = userRepository.findById(userDto.id()).orElseThrow(AccountDoesNotExistsException::new);
-        user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+    public CommonApiResponse changePassword (ChangePasswordRequest request){
+        String username = jwtService.extractUsername(request.getToken());
+        User user = userService.findUserByUsernameOrEmail(username);
+        user.setPassword(passwordEncoder.encode(request.getPassword()));
         userService.saveUser(user);
         try {
             emailFeatureService.sendGenericEmail(user.getEmail(), "Password Changed", String.format("%s\n%s","Your password has been changed on: ", new Date()), "Change Password Request");
-            return ChangePasswordResponse.builder()
-                    .header("Password Changed")
-                    .body("""
-                            <p>Your password has been changed successfully</p>
-                            <br/>
-                            <a href="/login">Login here</a>
-                            """)
+            return CommonApiResponse.builder()
+                    .status(ApiResponseStatus.SUCCESS)
+                    .message("Your password has been changed successfully")
                     .build();
         } catch (MessagingException e) {
             throw new EmailErrorException(user.getEmail());

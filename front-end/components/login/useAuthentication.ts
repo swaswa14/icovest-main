@@ -1,11 +1,10 @@
 import { z } from 'zod'
 
 export default function useAuthentication() {
-    const email = z
-        .string()
-        .email({ message: 'Invalid Email' })
-        .min(1, { message: 'Email is required' })
-
+    const email = z.union([
+        z.string().email({ message: 'Invalid Email' }),
+        z.string().min(1, { message: 'Username is required' }),
+    ])
     const password = z
         .string()
         .min(8, {
@@ -73,9 +72,22 @@ export default function useAuthentication() {
         email,
     })
 
+    const changePasswordSchema = z
+        .object({
+            password,
+            verifyPassword,
+        })
+        .refine(
+            (data) => {
+                return data.password === data.verifyPassword
+            },
+            { message: 'Passwords do not match', path: ['verifyPassword'] }
+        )
+
     return {
         loginSchema,
         registerSchema,
         forgotPasswordSchema,
+        changePasswordSchema,
     }
 }

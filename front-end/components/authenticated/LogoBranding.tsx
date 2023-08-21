@@ -22,8 +22,8 @@ export default function LogoBranding() {
     // Using useMutation for logout
     const mutation = useMutation(logout, {
         onSuccess: () => {
-            setUserDto(undefined)
-            router.reload()
+            setUserDto(null)
+            router.push('/login')
         },
     })
 
