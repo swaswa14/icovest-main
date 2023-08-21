@@ -99,7 +99,11 @@ input::-webkit-inner-spin-button {
 }
 
 
-
+@layer base{
+    body {
+        @apply dark:bg-[#1F2937] bg-[#F9FAFB] !important;
+    }
+}
 
 
 

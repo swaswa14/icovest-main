@@ -6,6 +6,7 @@ import { ThemeProvider } from 'next-themes'
 import { useRouter } from 'next/router'
 import AuthenticatedLayout from '@/components/authenticated/AuthenticatedLayout'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { Flowbite } from 'flowbite-react'
 
 const queryClient = new QueryClient()
 
@@ -59,8 +60,15 @@ const ChildComponent = memo(({ children }: ChildComponentProps) => {
     }
 
     return (
-        <ThemeProvider attribute={'class'} defaultTheme={currentTheme}>
-            <Layout>{children}</Layout>
+        <ThemeProvider
+            attribute={'class'}
+            defaultTheme={currentTheme}
+            enableSystem={true}
+        >
+            <Flowbite>
+                {' '}
+                <Layout>{children}</Layout>
+            </Flowbite>
         </ThemeProvider>
     )
 })

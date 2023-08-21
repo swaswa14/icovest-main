@@ -3,6 +3,7 @@ import { ReactNode } from 'react'
 import { useApplicationContext } from '@/context/ApplicationProvider'
 
 import PageRedirect from '@/components/PageRedirect'
+import { Flowbite } from 'flowbite-react'
 
 export interface AuthenticatedLayoutProps {
     children: ReactNode
