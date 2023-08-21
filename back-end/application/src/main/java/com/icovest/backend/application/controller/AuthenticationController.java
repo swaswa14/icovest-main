@@ -36,9 +36,13 @@ public class AuthenticationController {
     private String HOST;
     @PostMapping(value = "/authenticate", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    public Mono<UserDto> authenticate(@Valid @RequestBody LoginRequest request, HttpServletResponse response)  {
+    public Mono<UserDto> authenticate(@RequestBody LoginRequest request, HttpServletResponse response)  {
         log.info("Login Request {}", request);
-        return Mono.just(authenticationService.authenticate(request, response));
+        UserDto userDto = authenticationService.authenticate(request, response);
+        if(userDto == null){
+            return Mono.empty();
+        }
+        return Mono.just(userDto);
     }
 
     @PostMapping("/register")

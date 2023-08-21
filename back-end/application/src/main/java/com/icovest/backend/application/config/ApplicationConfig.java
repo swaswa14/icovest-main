@@ -34,7 +34,7 @@ public class ApplicationConfig {
                     .roles(Arrays.asList(Roles.BASIC_ACCESS, Roles.CLIENT_ACCESS))
                     .username("client")
                     .email("client@yopmail.com")
-                    .isEnabled(true)
+                    .isEnabled(false)
                     .password(passwordEncoder.encode("password"))
                     .build();
             log.info("User: {}", userRepository.save(swa));

@@ -125,22 +125,25 @@ public class AuthenticationService {
 
             log.info("Authentication: {}", authentication);
 
-            String jwtToken = jwtService.generateToken(user);
 
             SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            log.info("Authenticated user {}", user);
+            return userMapperService.apply(user);
+        } catch (BadCredentialsException ex){
+            throw new InvalidCredentialsException();
+        } catch (DisabledException e) {
+            log.info("Exception {}", e.getMessage());
+            UserDto dto = userMapperService.apply(user);
+            log.info("UserDto: {}", dto);
+            return dto;
+        }finally {
+            String jwtToken = jwtService.generateToken(user);
             Cookie jwtCookie = new Cookie("jwt", jwtToken);
             jwtCookie.setHttpOnly(true);
             jwtCookie.setPath("/");
             jwtCookie.setMaxAge(3600);
             response.addCookie(jwtCookie);
-
-            log.info("Authenticated user {}", user);
-
-            return userMapperService.apply(user);
-        } catch (BadCredentialsException ex){
-            throw new InvalidCredentialsException();
-        } catch (Exception e3){
-            return null;
         }
 
     }

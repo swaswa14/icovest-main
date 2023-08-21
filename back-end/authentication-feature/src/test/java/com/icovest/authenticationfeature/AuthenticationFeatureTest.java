@@ -1,6 +1,7 @@
 package com.icovest.authenticationfeature;
 
 import com.icovest.authenticationfeature.service.AuthenticationService;
+import com.icovest.backend.userfeature.entity.UserDto;
 import com.icovest.baseclass.errors.AccountNotEnabledException;
 import com.icovest.backend.userfeature.requests.AuthenticationResponse;
 import com.icovest.backend.userfeature.requests.LoginRequest;
@@ -67,7 +68,7 @@ public class AuthenticationFeatureTest {
                                         .build();
         MockHttpServletResponse mockResponse = new MockHttpServletResponse();
         Assertions.assertThrows(AccountNotEnabledException.class, ()->{
-            AuthenticationResponse response = authenticationService.authenticate(loginRequest, mockResponse);
+            UserDto response = authenticationService.authenticate(loginRequest, mockResponse);
             assert(response != null);
 
         });
