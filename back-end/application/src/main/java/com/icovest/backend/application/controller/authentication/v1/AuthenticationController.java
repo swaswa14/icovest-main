@@ -1,4 +1,4 @@
-package com.icovest.backend.application.controller;
+package com.icovest.backend.application.controller.authentication.v1;
 
 import com.fasterxml.jackson.core.util.RequestPayload;
 import com.icovest.authenticationfeature.service.AuthenticationService;
@@ -39,9 +39,7 @@ public class AuthenticationController {
     public Mono<UserDto> authenticate(@RequestBody LoginRequest request, HttpServletResponse response)  {
         log.info("Login Request {}", request);
         UserDto userDto = authenticationService.authenticate(request, response);
-        if(userDto == null){
-            return Mono.empty();
-        }
+
         return Mono.just(userDto);
     }
 
@@ -57,7 +55,7 @@ public class AuthenticationController {
     public String enableUser(@RequestParam String token, HttpServletResponse response) throws IOException {
         log.info("Enable User Request");
         AccountEnableResponse accountEnableResponse = authenticationService.enableUser(token);
-        String redirectURL = String.format("http://%s:%s/register?token=%s&expired?%s",HOST, CLIENT_PORT, accountEnableResponse.getToken(), accountEnableResponse.isExpired());
+        String redirectURL = String.format("/register?token=%s&expired?%s", accountEnableResponse.getToken(), accountEnableResponse.isExpired());
 
         response.setHeader("Location", redirectURL);
         response.setStatus(302);
@@ -69,7 +67,7 @@ public class AuthenticationController {
     @ResponseStatus(HttpStatus.OK)
     public String resetPassword(@RequestParam String token, HttpServletResponse response) throws IOException {
         log.info("Reset Password Request");
-        String redirectURL = String.format("http://%s:%s/forgot?token=%s", HOST, CLIENT_PORT, token);
+        String redirectURL = String.format("/forgot?token=%s",  token);
 
         response.setHeader("Location", redirectURL);
         response.setStatus(302);
@@ -79,51 +77,44 @@ public class AuthenticationController {
 
     @GetMapping("/forgot-password")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<CommonApiResponse> forgotPassword(@RequestParam String email){
+    public ResponseEntity<CommonApiResponse> forgotPassword(@RequestParam String email){
         log.info("Forgot Password Request {}", email);
 
-        return Mono.just(authenticationService.forgotPassword(email));
+        return ResponseEntity.ok().body(authenticationService.forgotPassword(email));
     }
 
     @PostMapping("/change-password")
     @ResponseStatus(HttpStatus.OK)
-    public Mono<CommonApiResponse> changePassword(@Valid @RequestBody ChangePasswordRequest request){
+    public ResponseEntity<CommonApiResponse> changePassword(@Valid @RequestBody ChangePasswordRequest request){
         log.info("Change Password Request");
-        return Mono.just(authenticationService.changePassword(request));
+        return ResponseEntity.ok().body(authenticationService.changePassword(request));
     }
 
 
     @GetMapping(value = "/authenticated")
     @ResponseStatus(HttpStatus.OK)
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN_ACCESS', 'ROLE_CLIENT_ACCESS', 'ROLE_AGENT_ACCESS', 'ROLE_BASIC_ACCESS')")
-    public ResponseEntity<Mono<UserDto>> getAuthenticatedUser(HttpServletRequest request){
+    public Mono<UserDto> getAuthenticatedUser(HttpServletRequest request){
         log.info("Get Authenticated User Request");
-        return ResponseEntity.ok(Mono.just(authenticationService.getAuthenticatedUser(request)));
+        return Mono.just(authenticationService.getAuthenticatedUser(request));
     }
 
 
-    @GetMapping("/logout")
+    @PostMapping("/logout")
     @ResponseStatus(HttpStatus.OK)
-    public String logout(HttpServletResponse response) throws IOException {
+    public String logout(HttpServletResponse response, HttpServletRequest request) throws IOException {
         log.info("Logout Request");
-        Cookie cookie = new Cookie("jwt", null); // Make sure to replace "cookieName" with the name of your actual
-        // cookie
-        cookie.setMaxAge(0);
-        cookie.setPath("/"); // This is important to make sure the cookie gets deleted for all paths
-        response.addCookie(cookie);
-        String redirectURL = String.format("http://%s:%s/login", HOST, CLIENT_PORT);
-        response.setHeader("Location", redirectURL);
-        response.setStatus(302);
-        response.sendRedirect(redirectURL);
 
-        return redirectURL;
+
+        return authenticationService.logoutUser(response, request);
+
 
     }
 
     @GetMapping(value = "/send-verification-email")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Mono<CommonApiResponse>> resendVerificationEmail(@RequestParam String email) {
+    public ResponseEntity<CommonApiResponse> resendVerificationEmail(@RequestParam String email) {
         // Your logic here
-        return ResponseEntity.ok(Mono.just(authenticationService.resendVerificationEmail(email)));
+        return ResponseEntity.ok(authenticationService.resendVerificationEmail(email));
     }
 }

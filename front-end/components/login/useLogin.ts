@@ -4,6 +4,8 @@ import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useRouter } from 'next/router'
 import { useApplicationContext } from '@/context/ApplicationProvider'
+import { useState } from 'react'
+import { ApiError } from '@/service/ApiError'
 
 export interface AuthenticationResponse {
     message: string
@@ -27,6 +29,7 @@ export interface Usdt {
 export default function useLogin() {
     const { loginSchema } = useAuthentication()
     const router = useRouter()
+    const [errorMessage, setErrorMessage] = useState<ApiError>()
     type LoginSchema = z.infer<typeof loginSchema>
     const {
         register,
@@ -57,9 +60,15 @@ export default function useLogin() {
                 console.log('authenticated user , ', data)
                 setUserDto(data)
                 router.reload()
-            } else {
+            } else if (
+                response.status === 403 ||
+                response.status === 409 ||
+                response.status === 404
+            ) {
+                const error: ApiError = await response.json()
                 setError('pass', { message: ' ' })
                 setError('user', { message: ' ' })
+                setErrorMessage(error)
             }
         } catch (error) {
             console.error('Error while logging in:', error)
@@ -74,5 +83,6 @@ export default function useLogin() {
         isSubmitSuccessful,
         watch,
         onSubmit,
+        errorMessage,
     }
 }

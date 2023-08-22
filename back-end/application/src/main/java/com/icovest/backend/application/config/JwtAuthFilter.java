@@ -46,6 +46,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         if (cookies == null || Arrays.stream(cookies).noneMatch(cookie -> cookie.getName().equals("jwt"))) {
             filterChain.doFilter(request, response);
+//            String redirectURL = "/login";
+//            response.setHeader("Location", redirectURL);
+//            response.setStatus(302);
+//            response.sendRedirect(redirectURL);
         }
         else {
             for (Cookie cookie : cookies) {
@@ -57,7 +61,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                     log.info("username " + username);
 
                     if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                        User userDetails = (User) this.userService.loadUserByUsername(username);
+                        User userDetails = this.userService.findUserByUsernameOrEmail(username);
 
                         if (jwtService.isTokenValid(jwt, userDetails)) {
                             UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

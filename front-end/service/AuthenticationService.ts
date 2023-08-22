@@ -24,9 +24,10 @@ export const logout = async (): Promise<Response | undefined> => {
     console.log('logout')
     try {
         return await fetch('/api/v1/auth/logout', {
-            method: 'GET',
+            method: 'POST',
             credentials: 'include',
             headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({}),
         })
     } catch (error) {
         console.error('Error while logging out:', error)

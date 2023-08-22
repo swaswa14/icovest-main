@@ -12,13 +12,11 @@ import {
 import { useMutation } from '@tanstack/react-query'
 import { logout } from '@/service/AuthenticationService'
 import { useApplicationContext } from '@/context/ApplicationProvider'
-import { useRouter } from 'next/router'
 
 import ToggleTheme from '@/components/features/toggle-theme-feature/ToggleTheme'
 
 export default function LogoBranding() {
     const { setUserDto } = useApplicationContext()
-    const router = useRouter()
     // Using useMutation for logout
     const mutation = useMutation(logout, {
         onSuccess: () => {

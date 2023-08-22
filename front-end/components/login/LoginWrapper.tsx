@@ -10,6 +10,7 @@ import FormButton from '@/components/FormButton'
 import { TextInput } from 'flowbite-react'
 import PageLoad from '@/components/PageRedirect'
 import FieldErrorMessage from '@/components/FieldErrorMessage'
+import { ResendEmailVerificationButton } from '@/components/login/RegisterWrapper'
 
 export default function LoginWrapper() {
     const {
@@ -19,7 +20,10 @@ export default function LoginWrapper() {
         isSubmitting,
         onSubmit,
         isSubmitSuccessful,
+        errorMessage,
+        watch,
     } = useLogin()
+    const usernameField = watch('user')
     return (
         <>
             {isSubmitSuccessful ? (
@@ -123,9 +127,23 @@ export default function LoginWrapper() {
                             label={'Log in'}
                         />
                         {errors.pass?.message?.trim() === '' && errors && (
-                            <FieldErrorMessage>
-                                {'Invalid Credentials'}
-                            </FieldErrorMessage>
+                            <div className={'flex flex-col justify-center'}>
+                                <FieldErrorMessage>
+                                    {errorMessage?.errorMessage}
+                                </FieldErrorMessage>
+                                {errorMessage?.exception ===
+                                    'AccountNotEnabledException' && (
+                                    <div
+                                        className={
+                                            'flex flex-row justify-center'
+                                        }
+                                    >
+                                        <ResendEmailVerificationButton
+                                            email={usernameField}
+                                        />
+                                    </div>
+                                )}
+                            </div>
                         )}
                         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
                             Don’t have an account yet?{' '}

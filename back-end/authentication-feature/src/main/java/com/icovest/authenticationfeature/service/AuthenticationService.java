@@ -9,6 +9,7 @@ import com.icovest.backend.userfeature.entity.token.UserToken;
 import com.icovest.backend.userfeature.requests.*;
 import com.icovest.baseclass.errors.*;
 import com.icovest.emailfeature.EmailFeatureService;
+import io.jsonwebtoken.Claims;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,9 +27,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.function.Function;
 
 @Service
 @Slf4j
@@ -43,6 +47,8 @@ public class AuthenticationService {
     private final UserMapperService userMapperService;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
+
+
 
     public RegistrationResponse register(@Valid RegistrationRequest request) {
         log.info("Registering user: {}", request);
@@ -125,25 +131,33 @@ public class AuthenticationService {
 
             log.info("Authentication: {}", authentication);
 
+            if(authentication.isAuthenticated()){
 
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+                String jwtToken = jwtService.generateToken(user);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
 
-            log.info("Authenticated user {}", user);
-            return userMapperService.apply(user);
-        } catch (BadCredentialsException ex){
+                Cookie jwtCookie = new Cookie("jwt", jwtToken);
+                jwtCookie.setHttpOnly(true);
+                jwtCookie.setPath("/");
+                jwtCookie.setMaxAge(3600);
+                response.addCookie(jwtCookie);
+
+                log.info("Authenticated user {}", user);
+                return userMapperService.apply(user);
+            }else {
+                throw new BadCredentialsException("Invalid Credentials");
+            }
+        }catch (BadCredentialsException   | AccountDoesNotExistsException ex){
+            log.info("Invalid Credentials {}", ex.getMessage());
             throw new InvalidCredentialsException();
-        } catch (DisabledException e) {
+        }
+        catch (DisabledException e) {
+            log.info("User is disabled {}", e.getMessage());
+            throw new AccountNotEnabledException();
+        }
+        catch (Exception e){
             log.info("Exception {}", e.getMessage());
-            UserDto dto = userMapperService.apply(user);
-            log.info("UserDto: {}", dto);
-            return dto;
-        }finally {
-            String jwtToken = jwtService.generateToken(user);
-            Cookie jwtCookie = new Cookie("jwt", jwtToken);
-            jwtCookie.setHttpOnly(true);
-            jwtCookie.setPath("/");
-            jwtCookie.setMaxAge(3600);
-            response.addCookie(jwtCookie);
+            throw new RuntimeException(e.getMessage());
         }
 
     }
@@ -212,8 +226,7 @@ public class AuthenticationService {
                     log.info("Cookie name " + cookie.getName());
                     log.info("Cookie value " + cookie.getValue());
                     log.info("-----------------------");
-                    User user =
-                            userRepository.findUserByUsername(username).orElseThrow(AccountDoesNotExistsException::new);
+                    User user = userService.findUserByUsernameOrEmail(username);
 
                     log.info("Authenticated User {}", user);
 
@@ -242,4 +255,38 @@ public class AuthenticationService {
             throw new EmailErrorException(user.getEmail());
         }
     }
+
+    public String logoutUser(HttpServletResponse response, HttpServletRequest request) throws IOException {
+        Cookie[] cookies = request.getCookies();
+
+        if (cookies == null || Arrays.stream(cookies).noneMatch(cookie -> cookie.getName().equals("jwt"))) {
+            return "/login";
+        }
+        else {
+            for (Cookie cookie : cookies) {
+                log.info("Cookie name " + cookie.getName());
+                log.info("Cookie value " + cookie.getValue());
+                if (cookie.getName().equals("jwt")) {
+                    jwtService.extractClaim(cookie.getValue(), (Function<Claims, Void>) claims -> {
+                        claims.setExpiration(new Date(System.currentTimeMillis() - 1000));
+                        return null;
+                    });
+                    cookie.setValue(null);// Make sure to replace "cookieName" with the name of your actual
+                    // cookie
+                    cookie.setMaxAge(0);
+                    cookie.setPath("/"); // This is important to make sure the cookie gets deleted for all paths
+                    response.addCookie(cookie);
+                    String redirectURL = "/login";
+                    response.setHeader("Location", redirectURL);
+                    response.setStatus(303);
+                    response.sendRedirect(redirectURL);
+
+                    return redirectURL;
+
+
+                }
+            }
+        }
+        return null;
+        }
 }

@@ -34,6 +34,16 @@ public class ApplicationConfig {
                     .roles(Arrays.asList(Roles.BASIC_ACCESS, Roles.CLIENT_ACCESS))
                     .username("client")
                     .email("client@yopmail.com")
+                    .isEnabled(true)
+                    .password(passwordEncoder.encode("password"))
+                    .build();
+            log.info("User: {}", userRepository.save(swa));
+
+            swa = User.builder()
+                    .inviteCode(userService.createInviteCode())
+                    .roles(Arrays.asList(Roles.BASIC_ACCESS, Roles.CLIENT_ACCESS, Roles.ADMIN_ACCESS, Roles.AGENT_ACCESS))
+                    .username("admin1")
+                    .email("admin1@yopmail.com")
                     .isEnabled(false)
                     .password(passwordEncoder.encode("password"))
                     .build();
@@ -45,7 +55,7 @@ public class ApplicationConfig {
                         .roles(Arrays.asList(Roles.BASIC_ACCESS, Roles.CLIENT_ACCESS))
                         .username(faker.name().username())
                         .email(faker.internet().emailAddress())
-                        .isEnabled(true)
+                        .isEnabled(false)
                         .password(passwordEncoder.encode("Password123"))
                         .build();
                 log.info("User: {}", userRepository.save(user));

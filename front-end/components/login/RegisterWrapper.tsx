@@ -1,8 +1,8 @@
 import AuthenticationContainer from '@/components/login/AuthenticationContainer'
-import { Button, Checkbox, Label, TextInput } from 'flowbite-react'
+import { Button, Checkbox, Label, TextInput, Tooltip } from 'flowbite-react'
 import { MdEmail } from 'react-icons/md'
 import { BsFillFilePersonFill } from 'react-icons/bs'
-import { RiLockPasswordLine } from 'react-icons/ri'
+import { RiLockPasswordLine, RiMailSendLine } from 'react-icons/ri'
 import Link from 'next/link'
 import { AiOutlineNumber } from 'react-icons/ai'
 import useRegister from '@/components/login/useRegister'
@@ -355,7 +355,7 @@ export const ResendEmailVerificationButton = ({
     const [success, setSuccess] = useState(false)
     const [loading, setLoading] = useState(false)
     const request: ResendEmailVerificationRequestProps = { email: email }
-    // Use the useMutation hook to handle the resend operation
+
     const mutation = useMutation(resendEmailVerification, {
         onSuccess: (data) => {
             setLoading(false)
@@ -374,25 +374,41 @@ export const ResendEmailVerificationButton = ({
                     Email has been sent!
                 </p>
             ) : (
-                <Button
-                    className="w-full"
-                    type={'submit'}
-                    onClick={() => {
-                        setLoading(true)
-                        setTimeout(() => {
-                            mutation.mutate(request)
-                        }, 2000)
-                    }} // Trigger the mutation when button is clicked
-                    disabled={loading}
+                <Tooltip
+                    content={'Resend Email Verification'}
+                    style={'auto'}
+                    placement={'top'}
                 >
-                    {loading ? (
-                        <LoadingIcons.SpinningCircles
-                            style={{ width: '1.5rem', height: '1.5rem' }}
-                        />
-                    ) : (
-                        'Resend Email Verification'
-                    )}
-                </Button>
+                    <button
+                        className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
+                        type={'button'}
+                        onClick={() => {
+                            setLoading(true)
+                            setTimeout(() => {
+                                mutation.mutate(request)
+                            }, 2000)
+                        }}
+                        disabled={loading}
+                        aria-label="Resend Email Verification"
+                    >
+                        {loading ? (
+                            <LoadingIcons.SpinningCircles
+                                style={{ width: '1.5rem', height: '1.5rem' }}
+                            />
+                        ) : (
+                            <div className={'flex flex-row justify-center'}>
+                                <p
+                                    className={
+                                        'text-sm font-light text-black dark:text-gray-50'
+                                    }
+                                >
+                                    Click to verify &nbsp;
+                                </p>
+                                <RiMailSendLine className="w-5 h-5" />
+                            </div>
+                        )}
+                    </button>
+                </Tooltip>
             )}
         </>
     )
