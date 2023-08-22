@@ -15,7 +15,7 @@ import { useApplicationContext } from '@/context/ApplicationProvider'
 
 import ToggleTheme from '@/components/features/toggle-theme-feature/ToggleTheme'
 
-export default function LogoBranding() {
+export default function CustomSideBar() {
     const { setUserDto } = useApplicationContext()
     // Using useMutation for logout
     const mutation = useMutation(logout, {
@@ -32,7 +32,10 @@ export default function LogoBranding() {
         }
     }
     return (
-        <Sidebar aria-label="Sidebar with logo branding example">
+        <Sidebar
+            aria-label="Sidebar with logo branding example"
+            className={'h-screen'}
+        >
             <Sidebar.Logo
                 href="#"
                 img="/favicon.svg"
@@ -41,8 +44,8 @@ export default function LogoBranding() {
             >
                 <p className={'hidden sm:block'}>Flowbite</p>
             </Sidebar.Logo>
-            <Sidebar.Items>
-                <Sidebar.ItemGroup>
+            <Sidebar.Items className={'flex flex-col'}>
+                <Sidebar.ItemGroup className={'flex flex-col flex-grow'}>
                     <Sidebar.Item
                         href="#"
                         icon={HiChartPie}

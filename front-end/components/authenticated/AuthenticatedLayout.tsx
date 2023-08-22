@@ -1,4 +1,4 @@
-import LogoBranding from '@/components/authenticated/LogoBranding'
+import CustomSideBar from '@/components/authenticated/CustomSideBar'
 import { ReactNode } from 'react'
 import { useApplicationContext } from '@/context/ApplicationProvider'
 
@@ -15,11 +15,11 @@ export default function AuthenticatedLayout({
     const { userDto } = useApplicationContext()
     return userDto ? (
         <div className={'flex flex-row h-screen'}>
-            <LogoBranding />
+            <CustomSideBar />
             <div className={'flex-grow justify-center flex mt-4'}>
                 {children}
             </div>
-            <div className={'w-1/6 border-l'}> </div>
+            <div className={'w-1/6'}> </div>
         </div>
     ) : (
         <PageRedirect link={'/login'} delay={1500} />
